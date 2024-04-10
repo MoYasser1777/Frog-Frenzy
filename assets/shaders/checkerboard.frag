@@ -12,5 +12,11 @@ uniform int size = 32;
 uniform vec3 colors[2];
 
 void main(){
-    frag_color = vec4(colors[0], 1.0);
+     // Calculate the position of the fragment in the grid
+    vec2 gridPosition = floor(vec2(gl_FragCoord.xy) / size);
+
+    // Determine which color the fragment should have based on its position
+    vec3 fragmentColor = colors[int(mod((gridPosition.x + gridPosition.y) , 2))];
+
+    frag_color = vec4(fragmentColor, 1.0);
 }
