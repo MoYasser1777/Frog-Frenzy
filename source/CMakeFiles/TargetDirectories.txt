@@ -1,0 +1,5 @@
+D:/University/Third year/Second Semester/Graphics/Project/Zombie-Tsumani/source/CMakeFiles/GAME_APPLICATION.dir
+D:/University/Third year/Second Semester/Graphics/Project/Zombie-Tsumani/source/CMakeFiles/ALL_BUILD.dir
+D:/University/Third year/Second Semester/Graphics/Project/Zombie-Tsumani/source/CMakeFiles/ZERO_CHECK.dir
+D:/University/Third year/Second Semester/Graphics/Project/Zombie-Tsumani/source/vendor/glfw/CMakeFiles/ALL_BUILD.dir
+D:/University/Third year/Second Semester/Graphics/Project/Zombie-Tsumani/source/vendor/glfw/src/CMakeFiles/glfw.dir
