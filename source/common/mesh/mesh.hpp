@@ -65,7 +65,7 @@ namespace our {
             glBindVertexArray(0);
 
             // Remember the number of elements
-            elementCount = elements.size();
+            elementCount = (GLsizei)elements.size();
         }
 
         // this function should render the mesh
