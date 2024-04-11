@@ -35,7 +35,10 @@ namespace our {
             static_assert(std::is_base_of<Component, T>::value, "T must inherit from Component");
             //TODO: (Req 8) Create an component of type T, set its "owner" to be this entity, then push it into the component's list
             // Don't forget to return a pointer to the new component
-            return nullptr;
+            T* comp = new T();
+            comp->owner=this;
+            this->components.push_back(comp);
+            return comp;
         }
 
         // This template method searhes for a component of type T and returns a pointer to it
@@ -44,6 +47,12 @@ namespace our {
         T* getComponent(){
             //TODO: (Req 8) Go through the components list and find the first component that can be dynamically cast to "T*".
             // Return the component you found, or return null of nothing was found.
+           std::list<Component*>::iterator it = components.begin();
+            while (it != components.end()) {
+                if(dynamic_cast<T*>(*it)){
+                    return dynamic_cast<T*>(*it);
+                }
+            }
             return nullptr;
         }
 
@@ -63,6 +72,14 @@ namespace our {
         void deleteComponent(){
             //TODO: (Req 8) Go through the components list and find the first component that can be dynamically cast to "T*".
             // If found, delete the found component and remove it from the components list
+            std::list<Component*>::iterator it = components.begin();
+            while (it != components.end()) {
+                if(dynamic_cast<T*>(*comp)){
+                    delete *it;
+                    it = components.erase(it);
+                }
+            }
+
         }
 
         // This template method searhes for a component of type T and deletes it
@@ -80,11 +97,27 @@ namespace our {
         void deleteComponent(T const* component){
             //TODO: (Req 8) Go through the components list and find the given component "component".
             // If found, delete the found component and remove it from the components list
+            std::list<Component*>::iterator it = components.begin();
+            while (it != components.end()) {
+                if(dynamic_cast<T*>(*comp) == component){
+                    delete *it;
+                    it = components.erase(it);
+                }
+            }
+
+
         }
 
         // Since the entity owns its components, they should be deleted alongside the entity
         ~Entity(){
             //TODO: (Req 8) Delete all the components in "components".
+            std::list<Component*>::iterator it = components.begin();
+            while (it != components.end()) {
+                delete *it;
+                it = components.erase(it);
+            }
+            components.clear();
+
         }
 
         // Entities should not be copyable
