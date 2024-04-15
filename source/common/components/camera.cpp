@@ -53,9 +53,7 @@ namespace our {
         return glm::ortho(aspect_ratio*(-orthoHeight/2), aspect_ratio*(orthoHeight/2), -orthoHeight/2, orthoHeight/2, near, far);
         }
         else if(cameraType == CameraType:: PERSPECTIVE){
-            return glm:: perspective(fovY, aspect_ratio, near, far);
-
-
+        return glm:: perspective(fovY, aspect_ratio, near, far);
         }
         
     }

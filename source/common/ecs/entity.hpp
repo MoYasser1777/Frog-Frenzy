@@ -74,7 +74,8 @@ namespace our {
             // If found, delete the found component and remove it from the components list
             std::list<Component*>::iterator it = components.begin();
             while (it != components.end()) {
-                if(dynamic_cast<T*>(*comp)){
+                if (dynamic_cast<T *>(*it))
+                {
                     delete *it;
                     it = components.erase(it);
                 }
@@ -99,7 +100,8 @@ namespace our {
             // If found, delete the found component and remove it from the components list
             std::list<Component*>::iterator it = components.begin();
             while (it != components.end()) {
-                if(dynamic_cast<T*>(*comp) == component){
+                if (dynamic_cast<T *>(*it) == component)
+                {
                     delete *it;
                     it = components.erase(it);
                 }
