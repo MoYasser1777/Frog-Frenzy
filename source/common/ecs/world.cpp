@@ -17,7 +17,7 @@ namespace our {
             if(entityData.contains("children")){
                 //TODO: (Req 8) Recursively call this world's "deserialize" using the children data
                 // and the current entity as the parent
-                deserialize(entityData["children"],ent);
+                this->deserialize(entityData["children"],ent);
                 
             }
         }
