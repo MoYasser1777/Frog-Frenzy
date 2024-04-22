@@ -29,7 +29,7 @@ bool our::ShaderProgram::attach(const std::string &filename, GLenum type) const
     //  the shader. The returned string will be empty if there is no errors.
 
     GLuint shader = glCreateShader(type);
-    glShaderSource(shader, 1, &sourceCStr, nullptr);
+    glShaderSource(shader, 1, &sourceCStr, nullptr); // 1 --> only one string holding the source code of the shader -- nullptr --> the source code is null-terminated
     glCompileShader(shader);
 
     std::string error = checkForShaderCompilationErrors(shader);
