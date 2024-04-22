@@ -11,7 +11,10 @@ namespace our
     {
         // TODO: (Req 7) Write this function
         pipelineState.setup();
-        shader->use();
+        if (shader)
+        {
+            shader->use();
+        }
     }
 
     // This function read the material data from a json object

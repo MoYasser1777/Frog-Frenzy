@@ -90,8 +90,11 @@ namespace our
         // TODO: (Req 1) Delete the copy constructor and assignment operator.
         // Question: Why do we delete the copy constructor and assignment operator?
 
-        // This is often done to prevent unintended behavior like accessing the same file in the same time when copying or assigning instances of the class,
-        // especially when dealing with OpenGL objects like shader programs.
+        // This is often done to prevent unintended behavior like accessing the same file (same resource in general) in the same time 
+        // when copying or assigning instances of the class, especially when dealing with OpenGL objects like shader programs.
+
+        // Disabling the assignment operator with delete prevents objects of the class from being assigned to each other,
+        // which can help avoid unexpected behavior and resource management issues.
 
         ShaderProgram(const ShaderProgram&) = delete; // Delete the copy constructor
         ShaderProgram& operator=(const ShaderProgram&) = delete; // Delete the assignment operator
