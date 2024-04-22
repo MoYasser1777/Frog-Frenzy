@@ -31,7 +31,7 @@ void main(){
         vec3(0.0,1.0,0.0),
         vec3(0.0,0.0,1.0)
     );
-    vec3 transformedPosition = positions[gl_VertexID] * vec3(scale, 1.0) + vec3(translation, 0.0);
+    vec3 transformedPosition = vec3(scale, 1.0) * positions[gl_VertexID] + vec3(translation, 0.0);
     gl_Position = vec4(transformedPosition, 1.0);
     vs_out.color = colors[gl_VertexID];
 }
