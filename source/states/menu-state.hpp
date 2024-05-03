@@ -6,6 +6,8 @@
 #include <texture/texture-utils.hpp>
 #include <material/material.hpp>
 #include <mesh/mesh.hpp>
+#include <irrKlang.h>
+using namespace irrklang;
 
 #include <functional>
 #include <array>
@@ -35,7 +37,8 @@ struct Button {
 
 // This state shows how to use some of the abstractions we created to make a menu.
 class Menustate: public our::State {
-
+    // Audio played in menu
+    ISoundEngine * sound; 
     // A meterial holding the menu shader and the menu texture to draw
     our::TexturedMaterial* menuMaterial;
     // A material to be used to highlight hovered buttons (we will use blending to create a negative effect).
@@ -56,7 +59,7 @@ class Menustate: public our::State {
         menuMaterial->shader->attach("assets/shaders/textured.frag", GL_FRAGMENT_SHADER);
         menuMaterial->shader->link();
         // Then we load the menu texture
-        menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu.png");
+        menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu_test.png");
         // Initially, the menu material will be black, then it will fade in
         menuMaterial->tint = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -99,13 +102,20 @@ class Menustate: public our::State {
         // - The argument list () which is the arguments that the lambda should receive when it is called.
         //      We leave it empty since button actions receive no input.
         // - The body {} which contains the code to be executed. 
-        buttons[0].position = {830.0f, 607.0f};
-        buttons[0].size = {400.0f, 33.0f};
+        buttons[0].position = {450.0f, 321.0f};
+        buttons[0].size = {305.0f, 70.0f};
         buttons[0].action = [this](){this->getApp()->changeState("play");};
 
-        buttons[1].position = {830.0f, 644.0f};
-        buttons[1].size = {400.0f, 33.0f};
+        buttons[1].position = {555.0f, 550.0f};
+        buttons[1].size = {110.0f, 50.0f};
         buttons[1].action = [this](){this->getApp()->close();};
+
+        sound = createIrrKlangDevice();
+
+        if (!sound)
+            std::cout << "Audio Failed" << std::endl;
+        else
+            sound->play2D("./sounds/zelda.mp3", true);
     }
 
     void onDraw(double deltaTime) override {
@@ -177,5 +187,6 @@ class Menustate: public our::State {
         delete menuMaterial;
         delete highlightMaterial->shader;
         delete highlightMaterial;
+        sound->drop(); // remove audio
     }
 };

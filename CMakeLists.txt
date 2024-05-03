@@ -93,6 +93,7 @@ include_directories(
         vendor/glm
         vendor/imgui
         vendor/utils
+        vendor/irrklang/include
 )
 
 
@@ -118,4 +119,14 @@ set(STATES_SOURCES
 # Each target compiles one example source file and the common & vendor source files
 # Then we link GLFW with each target
 add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
-target_link_libraries(GAME_APPLICATION glfw)
+target_link_libraries(GAME_APPLICATION glfw ${CMAKE_SOURCE_DIR}/vendor/irrklang/lib/irrKlang.lib)
+
+add_custom_command(TARGET GAME_APPLICATION POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dlls
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        ${PROJECT_SOURCE_DIR}/vendor/irrKlang/dlls/ikpFlac.dll 
+        ${PROJECT_SOURCE_DIR}/vendor/irrKlang/dlls/ikpMP3.dll
+        ${PROJECT_SOURCE_DIR}/vendor/irrKlang/dlls/irrKlang.dll
+        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/
+        COMMENT "Copying irrKlang DLLs to the bin directory"
+)
