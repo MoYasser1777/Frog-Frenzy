@@ -23,258 +23,936 @@
                 "textured":{
                     "vs":"assets/shaders/textured.vert",
                     "fs":"assets/shaders/textured.frag"
+                },
+                "lighted": {
+                  "vs": "assets/shaders/lighted.vert",
+                  "fs": "assets/shaders/lighted.frag"
                 }
             },
-            "textures":{
+            "textures": {
                 "moon": "assets/textures/moon.jpg",
-                "grass": "assets/textures/grass_ground_d.jpg",
-                "wood": "assets/textures/wood.jpg",
-                "glass": "assets/textures/glass-panels.png",
+                "grass": "assets/textures/grass_maze.jpg",
+                "water": "assets/textures/water.jpg",
+                "frog": "assets/textures/frog2.jpg",
+                "road": "assets/textures/2way.jpg",
+                "road3" : "assets/textures/3way.jpg",
+                "trunkWood": "assets/textures/woodenLog.png",
+                "woodenBox": "assets/textures/wooden.png",
+                "rock": "assets/textures/rockTextures/13-ambient_occlusion.png",
+                "rockAmbient": "assets/textures/rockTextures/13-ambient_occlusion.png",
                 "monkey": "assets/textures/monkey.png",
-                "frog": "assets/textures/frog.jpg",
-                "road": "assets/textures/way.jpg"
-            },
-            "meshes":{
+                "tire": "assets/textures/tire.jpg",
+                "brickWall": "assets/textures/kadyWall.png",
+                "stone": "assets/textures/stone.jpg",
+                "pipe" : "assets/textures/pipe.png",
+                "car": "assets/textures/car2.jpg",
+                "floatingCar" : "assets/textures/floatingCar.png"
+              },
+              "meshes": {
                 "cube": "assets/models/cube.obj",
-                "monkey": "assets/models/monkey.obj",
+                "frog": "assets/models/frog2.obj",
                 "plane": "assets/models/plane.obj",
+                "maze": "assets/models/maze.obj",
                 "sphere": "assets/models/sphere.obj",
-                "frog": "assets/models/frog.obj"
-            },
+                "car": "assets/models/car.obj",
+                "trunkWood": "assets/models/woodenLog.obj",
+                "woodenBox": "assets/models/wooden.obj",
+                "tire": "assets/models/sphere.obj",
+                "rock": "assets/models/rock.obj",
+                "monkey": "assets/models/monkey.obj",
+                "wall": "assets/models/wall.obj",
+                "tunnel": "assets/models/tunnel.obj",
+                "pipe" : "assets/models/pipe.obj",
+                "floatingCar" : "assets/models/floatingCar.obj",
+                "truck" : "assets/models/truck.obj"
+              },
             "samplers":{
                 "default":{},
                 "pixelated":{
                     "MAG_FILTER": "GL_NEAREST"
+                },
+                "repeated": {
+                  "MAG_FILTER": "GL_LINEAR",
+                  "MIN_FILTER": "GL_LINEAR",
+                  "WRAP_S": "GL_MIRRORED_REPEAT",
+                  "WRAP_T": "GL_MIRRORED_REPEAT"
                 }
             },
-            "materials":{
-                "metal":{
-                    "type": "tinted",
-                    "shader": "tinted",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
+            "materials": {
+                "pipe": {
+                  "type": "textured",
+                  "shader": "textured",
+                  "pipelineState": {
+                    "faceCulling": {
+                      "enabled": false
                     },
-                    "tint": [0.45, 0.4, 0.5, 1]
+                    "depthTesting": {
+                      "enabled": true
+                    }
+                  },
+                  "tint": [1, 1, 1, 1],
+                  "texture": "pipe",
+                  "sampler": "default"
                 },
-                "glass":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        },
-                        "blending":{
-                            "enabled": true,
-                            "sourceFactor": "GL_SRC_ALPHA",
-                            "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
-                        },
-                        "depthMask": false
+                "floatingCar": {
+                  "type": "textured",
+                  "shader": "textured",
+                  "pipelineState": {
+                    "faceCulling": {
+                      "enabled": false
                     },
-                    "transparent": true,
-                    "tint": [1, 1, 1, 1],
-                    "texture": "glass",
-                    "sampler": "pixelated"
+                    "depthTesting": {
+                      "enabled": true
+                    }
+                  },
+                  "tint": [1, 1, 1, 1],
+                  "texture": "floatingCar",
+                  "sampler": "default"
                 },
-                "grass":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
+                "road3": {
+                  "type": "textured",
+                  "shader": "textured",
+                  "pipelineState": {
+                    "faceCulling": {
+                      "enabled": false
                     },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "grass",
-                    "sampler": "default"
+                    "depthTesting": {
+                      "enabled": true
+                    }
+                  },
+                  "tint": [1, 1, 1, 1],
+                  "texture": "road3",
+                  "sampler": "default"
                 },
-                "road":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
+                "tire": {
+                  "type": "lighted",
+                  "shader": "lighted",
+                  "pipelineState": {
+                    "faceCulling": {
+                      "enabled": false
                     },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "road",
-                    "sampler": "default"
+                    "depthTesting": {
+                      "enabled": true
+                    }
+                  },
+                  "tint": [1, 1, 1, 1],
+                  "texture": "tire",
+                  "sampler": "default",
+                  "albedo": "tire"
                 },
-                "monkey":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
+                "rock": {
+                  "type": "lighted",
+                  "shader": "lighted",
+                  "pipelineState": {
+                    "faceCulling": {
+                      "enabled": false
                     },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "monkey",
-                    "sampler": "default"
+                    "depthTesting": {
+                      "enabled": true
+                    }
+                  },
+                  "tint": [1, 1, 1, 1],
+                  "texture": "rock",
+                  "sampler": "default",
+                  "albedo": "rock"
                 },
-                "moon":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
+                "brickWall": {
+                  "type": "textured",
+                  "shader": "textured",
+                  "sampler": "repeated",
+                  "pipelineState": {
+                    "faceCulling": {
+                      "enabled": false
                     },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "moon",
-                    "sampler": "default"
+                    "depthTesting": {
+                      "enabled": true
+                    }
+                  },
+                  "tint": [1, 1, 1, 1],
+                  "texture": "brickWall"
                 },
-                "frog":{
-                    "type": "textured",
-                    "shader": "textured",
-                    "pipelineState": {
-                        "faceCulling":{
-                            "enabled": false
-                        },
-                        "depthTesting":{
-                            "enabled": true
-                        }
+                "metal": {
+                  "type": "tinted",
+                  "shader": "tinted",
+                  "pipelineState": {
+                    "faceCulling": {
+                      "enabled": false
                     },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "frog",
-                    "sampler": "default"
+                    "depthTesting": {
+                      "enabled": true
+                    }
+                  },
+                  "tint": [0.45, 0.4, 0.5, 1]
+                },
+                "water": {
+                  "type": "lighted",
+                  "shader": "lighted",
+                  "pipelineState": {
+                    "faceCulling": {
+                      "enabled": false
+                    },
+                    "depthTesting": {
+                      "enabled": true
+                    }
+                  },
+                  "tint": [1, 1, 1, 1],
+                  "texture": "water",
+                  "sampler": "default",
+                  "albedo": "water"
+                },
+                "trunkWoodMaterial": {
+                  "type": "lighted",
+                  "shader": "lighted",
+                  "pipelineState": {
+                    "faceCulling": {
+                      "enabled": false
+                    },
+                    "depthTesting": {
+                      "enabled": true
+                    }
+                  },
+                  "tint": [1, 1, 1, 1],
+                  "texture": "trunkWood",
+                  "sampler": "default",
+                  "albedo": "trunkWood"
+                },
+                "grass": {
+                  "type": "lighted",
+                  "shader": "lighted",
+                  "pipelineState": {
+                    "faceCulling": {
+                      "enabled": false
+                    },
+                    "depthTesting": {
+                      "enabled": true
+                    }
+                  },
+                  "tint": [1, 1, 1, 1],
+                  "texture": "grass",
+                  "sampler": "default",
+                  "albedo": "grass"
+                },
+                "road": {
+                  "type": "lighted",
+                  "shader": "lighted",
+                  "pipelineState": {
+                    "faceCulling": {
+                      "enabled": false
+                    },
+                    "depthTesting": {
+                      "enabled": true
+                    }
+                  },
+                  "tint": [1, 1, 1, 1],
+                  "texture": "road",
+                  "sampler": "default",
+                  "albedo": "road",
+                  "ambient_occlusion": "road",
+                  "roughness": "road"
+                },
+                "frog": {
+                  "type": "textured",
+                  "shader": "textured",
+                  "pipelineState": {
+                    "faceCulling": {
+                      "enabled": false
+                    },
+                    "depthTesting": {
+                      "enabled": true
+                    }
+                  },
+                  "tint": [1, 1, 1, 1],
+                  "sampler": "default",
+                  "texture": "frog"
+                },
+                "woodenBox": {
+                  "type": "textured",
+                  "shader": "textured",
+                  "pipelineState": {
+                    "faceCulling": {
+                      "enabled": false
+                    },
+                    "depthTesting": {
+                      "enabled": true
+                    }
+                  },
+                  "tint": [1, 1, 1, 1],
+                  "texture": "woodenBox",
+                  "sampler": "default"
+                },
+                "monkey": {
+                  "type": "textured",
+                  "shader": "textured",
+                  "pipelineState": {
+                    "faceCulling": {
+                      "enabled": false
+                    },
+                    "depthTesting": {
+                      "enabled": true
+                    }
+                  },
+                  "tint": [1, 1, 1, 1],
+                  "texture": "monkey",
+                  "sampler": "default"
+                },
+                "car": {
+                  "type": "lighted",
+                  "shader": "lighted",
+                  "pipelineState": {
+                      "faceCulling": {
+                          "enabled": false
+                      },
+                      "depthTesting": {
+                          "enabled": true
+                      }
+                  },
+                  "tint": [1,1,1,1],
+                  "texture": "car",
+                  "sampler": "default",
+                  "albedo": "car",
+                  "specular": "white",
+                  "roughness": "black",
+                  "emissive": "black",
+                  "ambient_occlusion": "car"
+                },
+                "moon": {
+                  "type": "lighted",
+                  "shader": "lighted",
+                  "pipelineState": {
+                    "faceCulling": {
+                      "enabled": false
+                    },
+                    "depthTesting": {
+                      "enabled": true
+                    }
+                  },
+                  "tint": [1, 1, 1, 1],
+                  "texture": "moon",
+                  "sampler": "default",
+                  "albedo": "moon",
+                  "ambient_occlusion": "moon"
+                },
+                "stone": {
+                  "type": "textured",
+                  "shader": "textured",
+                  "pipelineState": {
+                    "faceCulling": {
+                      "enabled": false
+                    },
+                    "depthTesting": {
+                      "enabled": true
+                    }
+                  },
+                  "tint": [1, 1, 1, 1],
+                  "texture": "stone",
+                  "sampler": "default"
                 }
-            }
-        },
+              }
+            },
         "world":[
             {
-                "position": [0, -1, 0],
-                "rotation": [-90, 0, 0],
-                "scale": [10, 10, 1],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "road"
-                    }
-                ]
+              "position": [10, 0, -50],
+              "rotation": [45, 45, 0],
+              "scale": [5, 5, 5],
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "sphere",
+                  "material": "moon"
+                },
+                {
+                  "type": "Movement",
+                  "angularVelocity": [0, 90, 0]
+                },
+                {
+                  // "type": "Light",
+                  // "lightType": "directional",
+                  // "diffuse": [5, 5, 5],
+                  // "specular": [0.93, 0.94, 0.96],
+                  // "direction": [10, 0, 0]
+                  "type": "Light",
+                  "lightType": "directional",
+                  "diffuse": [1.2, 1.2, 1.2],
+                  "specular": [0.83, 0.84, 0.86],
+                  "direction": [10, 0, 0]
+                }
+              ]
             },
             {
-                "position": [0, 3, 10],
-                "components": [
-                    {
-                        "type": "Camera"
-                    },
-                    {
-                        "type": "Free Camera Controller"
-                    }
-                ],
-                "children": [
-                    {
-                        "position": [0, -4, -5],
-                        "rotation": [-90, 0, 0],
-                        "scale": [0.1, 0.1, 0.1],
-                        "name": "frog",
-                        "components": [
-                            {
-                                "type": "Mesh Renderer",
-                                "mesh": "frog",
-                                "material": "frog"
-                            }
-                        ]
-                    }
-                ]
+              "rotation": [-90, 0, 0],
+              "position": [0, -1, 10],
+              "scale": [0.05, 0.05, 0.05],
+              "name": "frog",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "frog",
+                  "material": "frog"
+                }
+              ],
+              "children": [
+                // {
+                //   "rotation": [45, 0, 0],
+                //   "position": [0, -40, 100],
+                //   "components": [
+                //     {
+                //       "type": "Camera"
+                //     },
+                //     {
+                //       "type": "Free Camera Controller"
+                //     }
+                //   ],
+                //   "children": [
+                //     {
+                //       "rotation": [0, 0, 0],
+                //       "position": [0, -10, -2],
+                //       "name": "monkey",
+                //       "components": [
+                //         {
+                //           "type": "Mesh Renderer",
+                //           "mesh": "monkey",
+                //           "material": "monkey"
+                //         }
+                //       ]
+                //     }
+                //   ]
+                // }
+              ]
             },
             {
-                "position": [0, 1, 2],
-                "rotation": [0, 0, 0],
-                "scale": [2, 2, 2],
-                "components": [
+              "position": [0, 1, 12],
+              "components": [
+                {
+                  "type": "Camera"
+                },
+                {
+                  "type": "Free Camera Controller"
+                }
+              ],
+              "children": [
+                {
+                  "rotation": [0, 0, 0],
+                  "position": [0, -10, -2],
+                  "name": "monkey",
+                  "components": [
                     {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
+                      "type": "Mesh Renderer",
+                      "mesh": "monkey",
+                      "material": "monkey"
                     }
-                ]
+                  ]
+                }
+              ]
             },
             {
-                "position": [0, 1, -2],
-                "rotation": [0, 0, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
+              "position": [0, -0.999, 14.75],
+              "rotation": [-90, 0, 0],
+              "scale": [10, 4, 1],
+              "name": "water",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "plane",
+                  "material": "water"
+                }
+              ]
             },
             {
-                "position": [2, 1, 0],
-                "rotation": [0, 90, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
+              "position": [0, -1, 9.75],
+              "rotation": [-90, 0, 0],
+              "scale": [10, 1, 1],
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "plane",
+                  "material": "grass"
+                }
+              ]
             },
             {
-                "position": [-2, 1, 0],
-                "rotation": [0, 90, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
+              "position": [0, -1, 6.5],
+              "rotation": [90, 0, 0],
+              "scale": [10, 2.25, 1],
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "plane",
+                  "material": "road3"
+                }
+              ]
             },
             {
-                "position": [0, 3, 0],
-                "rotation": [90, 0, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
+              "position": [0, -0.99, 3],
+              "rotation": [-90, 0, 90],
+              "scale": [1.25, 10, 1],
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "plane",
+                  "material": "grass"
+                }
+              ]
             },
             {
-                "position": [0, 10, 0],
-                "rotation": [45, 45, 0],
-                "scale": [5, 5, 5],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "sphere",
-                        "material": "moon"
-                    },
-                    {
-                        "type": "Movement",
-                        "angularVelocity": [0, 90, 0]
-                    }
-                ]
+              "position": [0, -0.999, 1.25],
+              "rotation": [-90, 0, 0],
+              "scale": [10, 0.5, 1],
+              "name": "water",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "plane",
+                  "material": "water"
+                }
+              ]
+            },
+            {
+              "position": [0, -1, -0.25],
+              "rotation": [-90, 0, 90],
+              "scale": [1, 10, 1],
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "plane",
+                  "material": "grass"
+                }
+              ]
+            },
+            {
+              "position": [0, -1, -2.75],
+              "rotation": [90, 0, 0],
+              "scale": [10, 1.5, 1],
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "plane",
+                  "material": "road"
+                }
+              ]
+            },
+            {
+              "position": [0, -1, -5.25],
+              "rotation": [-90, 0, 90],
+              "scale": [1, 10, 1],
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "plane",
+                  "material": "grass"
+                }
+              ]
+            },
+            {
+              "position": [0, -0.999, -7.25],
+              "rotation": [-90, 0, 0],
+              "scale": [10, 1, 1],
+              "name": "water",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "plane",
+                  "material": "water"
+                }
+              ]
+            },
+            {
+              "position": [0, -1, -9.25],
+              "rotation": [-90, 0, 90],
+              "scale": [1, 10, 1],
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "plane",
+                  "material": "grass"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [0, -3, -11.25],
+              "scale": [0.5, 0.4, 0.5],
+              "name": "woodenBox",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "woodenBox",
+                  "material": "woodenBox"
+                },
+                {
+                  "name": "woodenBox",
+                  "type": "Movement",
+                  "angularVelocity": [0, 0, 0],
+                  "linearVelocity": [0, 0, 0]
+                }
+              ]
+            },
+            {
+              "rotation": [90, 0, 0],
+              "position": [10, 0, 10.25],
+              "scale": [2, 2.25, 0.5],
+              "name": "brickWall",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "wall",
+                  "material": "brickWall"
+                }
+              ]
+            },
+            {
+              "rotation": [90, 0, 0],
+              "position": [-10, 0, 10.25],
+              "scale": [2, 2.25, 0.5],
+              "name": "brickWall",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "wall",
+                  "material": "brickWall"
+                }
+              ]
             }
-        ]
+            ,
+            {
+              "rotation": [90, 0, 90],
+              "position": [11, 0, 20],
+              "scale": [2, 5.5, 0.5],
+              "name": "brickWall",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "wall",
+                  "material": "brickWall"
+                }
+              ]
+            },
+            {
+              "rotation": [90, 0, 0],
+              "position": [10, 0, 1.75],
+              "scale": [2, 0.25, 0.5],
+              "name": "brickWall",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "wall",
+                  "material": "brickWall"
+                }
+              ]
+            },
+            {
+              "rotation": [90, 0, 0],
+              "position": [-10, 0, 1.75],
+              "scale": [2, 0.25, 0.5],
+              "name": "brickWall",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "wall",
+                  "material": "brickWall"
+                }
+              ]
+            },
+            {
+              "rotation": [90, 0, 0],
+              "position": [10, 0, -0.25],
+              "scale": [2, 0.25, 0.5],
+              "name": "brickWall",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "wall",
+                  "material": "brickWall"
+                }
+              ]
+            },
+            {
+              "rotation": [90, 0, 0],
+              "position": [-10, 0, -0.25],
+              "scale": [2, 0.25, 0.5],
+              "name": "brickWall",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "wall",
+                  "material": "brickWall"
+                }
+              ]
+            },
+            {
+              "rotation": [90, 0, 0],
+              "position": [10, 0, -6.25],
+              "scale": [2, 0.25, 0.5],
+              "name": "brickWall",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "wall",
+                  "material": "brickWall"
+                }
+              ]
+            },
+            {
+              "rotation": [90, 0, 0],
+              "position": [-10, 0, -6.25],
+              "scale": [2, 0.25, 0.5],
+              "name": "brickWall",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "wall",
+                  "material": "brickWall"
+                }
+              ]
+            },
+            {
+              "rotation": [90, 0, 0],
+              "position": [10, 0, -10.25],
+              "scale": [2, 0.5, 0.5],
+              "name": "brickWall",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "wall",
+                  "material": "brickWall"
+                }
+              ]
+            },
+            {
+              "rotation": [90, 0, 0],
+              "position": [-10, 0, -10.25],
+              "scale": [2, 0.5, 0.5],
+              "name": "brickWall",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "wall",
+                  "material": "brickWall"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 0, 0],
+              "position": [9, -1, 6.5],
+              "scale": [1, 1, 3],
+              "name": "stoneTunnel",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "tunnel",
+                  "material": "stone"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 0, 0],
+              "position": [-11, -1, 6.5],
+              "scale": [1, 1, 3],
+              "name": "stoneTunnel",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "tunnel",
+                  "material": "stone"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 0, 0],
+              "position": [9, -1, -2.75],
+              "scale": [1, 1, 2],
+              "name": "stoneTunnel",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "tunnel",
+                  "material": "stone"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 0, 0],
+              "position": [-11, -1, -2.75],
+              "scale": [1, 1, 2],
+              "name": "stoneTunnel",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "tunnel",
+                  "material": "stone"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [0, -1.2, 1.25],
+              "scale": [1, 1, 0.5],
+              "name": "log",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "trunkWood",
+                  "material": "trunkWoodMaterial"
+                },
+                {
+                  "name": "log",
+                  "type": "Movement",
+                  "linearVelocity": [3, 0, 0]
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [0, -1.2, -6.75],
+              "scale": [1, 1, 0.5],
+              "name": "log",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "trunkWood",
+                  "material": "trunkWoodMaterial"
+                },
+                {
+                  "name": "reverseLog",
+                  "type": "Movement",
+                  "linearVelocity": [3, 0, 0] 
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [0, -1.2, -7.75],
+              "scale": [1, 1, 0.5],
+              "name": "log",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "trunkWood",
+                  "material": "trunkWoodMaterial"
+                },
+                {
+                  "name": "log",
+                  "type": "Movement",
+                  "linearVelocity": [3, 0, 0] 
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [10, -1, 1.25],
+              "scale": [4, 7, 2],
+              "name": "pipe",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "pipe",
+                  "material": "pipe"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [-10, -1, 1.25],
+              "scale": [4, 7, 2],
+              "name": "pipe",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "pipe",
+                  "material": "pipe"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [10, -1, -7.25],
+              "scale": [7, 7, 2],
+              "name": "pipe",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "pipe",
+                  "material": "pipe"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [-10, -1, -7.25],
+              "scale": [7, 7, 2],
+              "name": "pipe",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "pipe",
+                  "material": "pipe"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [0, -0.5, 8],
+              "scale": [0.3, 0.3, 0.3],
+              "name": "floatingCar",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "floatingCar",
+                  "material": "floatingCar"
+                }
+              ]
+            },
+            {
+              "rotation": [0, -90, 0],
+              "position": [0, -0.5, 6.5],
+              "scale": [0.3, 0.3, 0.3],
+              "name": "floatingCar",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "floatingCar",
+                  "material": "floatingCar"
+                }
+              ]
+            },
+            {
+              "rotation": [0, -90, 0],
+              "position": [0, -0.5, 5],
+              "scale": [0.3, 0.3, 0.3],
+              "name": "floatingCar",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "floatingCar",
+                  "material": "floatingCar"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [0, -0.5, -2],
+              "scale": [0.3, 0.3, 0.3],
+              "name": "floatingCar",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "floatingCar",
+                  "material": "floatingCar"
+                }
+              ]
+            },
+            {
+              "rotation": [0, -90, 0],
+              "position": [0, -0.5, -3.5],
+              "scale": [0.3, 0.3, 0.3],
+              "name": "floatingCar",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "floatingCar",
+                  "material": "floatingCar"
+                }
+              ]
+            }
+          ]
     }
 }

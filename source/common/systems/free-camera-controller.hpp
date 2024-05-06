@@ -100,37 +100,31 @@ namespace our
             if(app->getKeyboard().isPressed(GLFW_KEY_A)) position -= right * (deltaTime * current_sensitivity.x);
 
             Entity * frog = nullptr;
+            std::vector<Entity *> logs;
             for (auto entity : world->getEntities())
             {
                 std::string name = entity->name;
-                if (name == "frog")
+                 if (name == "frog")
                 {
                     frog = entity;
+                }else if (name == "log")
+                {
+                    logs.push_back(entity);
                 }
             }
             if (!frog)
                 return;
-            if (
-                app->getKeyboard().isPressed(GLFW_KEY_UP) ||
-                app->getKeyboard().isPressed(GLFW_KEY_DOWN) ||
-                app->getKeyboard().isPressed(GLFW_KEY_LEFT) ||
-                app->getKeyboard().isPressed(GLFW_KEY_RIGHT))
+            if (app->getKeyboard().isPressed(GLFW_KEY_UP) || app->getKeyboard().isPressed(GLFW_KEY_DOWN) || app->getKeyboard().isPressed(GLFW_KEY_LEFT) || app->getKeyboard().isPressed(GLFW_KEY_RIGHT))
             {
                 // MOVING   =>  Jump Effect
-                frog->localTransform.position.y = float(0.05f * sin(glfwGetTime() * 10) + 0.05f) - 4;           // make the frog jump
+                frog->localTransform.position.y = float(0.05f * sin(glfwGetTime() * 10) + 0.05f) - 1;           // make the frog jump
                 frog->localTransform.rotation.x = float(0.1f * sin(glfwGetTime() * 10)) - glm::pi<float>() / 2; // make the frog rotate
-                frog->localTransform.scale.y = 0.01f * sin(glfwGetTime() * 10) + 0.1f;                         // make the frog scale
-
-                // std::thread audioThread(this->playAudio, "frog_move.ogg");
-                // audioThread.detach();
+                frog->localTransform.scale.y = 0.01f * sin(glfwGetTime() * 10) + 0.075f;                         // make the frog scale
 
                 // UP
                 if (app->getKeyboard().isPressed(GLFW_KEY_UP))
                 {
-                    // prevent the frog from passing through the wall
-            
-
-                    // update the camera position
+                     // update the camera position
                     position += front * (deltaTime * current_sensitivity.z);
                     // update the frog position
                     frog->localTransform.position += front * (deltaTime * current_sensitivity.z);
@@ -140,8 +134,6 @@ namespace our
                 // DOWN
                 else if (app->getKeyboard().isPressed(GLFW_KEY_DOWN))
                 {
-
-
                     position -= front * (deltaTime * current_sensitivity.z);
                     frog->localTransform.position -= front * (deltaTime * current_sensitivity.z);
                     frog->localTransform.rotation.y = glm::pi<float>();
@@ -149,7 +141,6 @@ namespace our
                 // RIGHT
                 else if (app->getKeyboard().isPressed(GLFW_KEY_RIGHT))
                 {
-
                     position += right * (deltaTime * current_sensitivity.x);
                     frog->localTransform.position += right * (deltaTime * current_sensitivity.x);
                     frog->localTransform.rotation.y = glm::pi<float>() * -0.5f;
@@ -157,7 +148,6 @@ namespace our
                 // LEFT
                 else if (app->getKeyboard().isPressed(GLFW_KEY_LEFT))
                 {
-
                     position -= right * (deltaTime * current_sensitivity.x);
                     frog->localTransform.position -= right * (deltaTime * current_sensitivity.x);
                     frog->localTransform.rotation.y = glm::pi<float>() * 0.5f;

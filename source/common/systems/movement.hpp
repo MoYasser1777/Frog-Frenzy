@@ -26,9 +26,34 @@ namespace our
                 // If the movement component exists
                 if(movement){
                     // Change the position and rotation based on the linear & angular velocity and delta time.
-                    entity->localTransform.position += deltaTime * movement->linearVelocity;
-                    entity->localTransform.rotation += deltaTime * movement->angularVelocity;
+                    if (movement->name == "log")
+                    {
+                        if (-11.0f <= entity->localTransform.position[0] && entity->localTransform.position[0] <= 11.0f)
+                        {
+                            // inside the water
+                            entity->localTransform.position += deltaTime * movement->linearVelocity;
+                        }
+                        else if (entity->localTransform.position[0] >= 11.0f)
+                        {
+                            // outside the width so bring it inside
+                            entity->localTransform.position[0] = -11.0f;
+                        }
+                    }
+                    if (movement->name == "reverseLog")
+                    {
+                        if (-11.0f <= entity->localTransform.position[0] && entity->localTransform.position[0] <= 11.0f)
+                        {
+                            // inside the water
+                            entity->localTransform.position -= deltaTime * movement->linearVelocity;
+                        }
+                        else if (entity->localTransform.position[0] <= -11.0f)
+                        {
+                            // outside the width so bring it inside
+                            entity->localTransform.position[0] = 11.0f;
+                        }
+                    }
                 }
+                
             }
         }
 
