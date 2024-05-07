@@ -583,8 +583,7 @@
                   "material": "brickWall"
                 }
               ]
-            }
-            ,
+            },
             {
               "rotation": [90, 0, 90],
               "position": [11, 0, 20],
@@ -756,7 +755,26 @@
             },
             {
               "rotation": [0, 90, 0],
-              "position": [0, -1.2, 1.25],
+              "position": [-30, -1.2, 1],
+              "scale": [1, 1, 0.5],
+              "name": "log",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "trunkWood",
+                  "material": "trunkWoodMaterial"
+                },
+                {
+                  "name": "log",
+                  "type": "Movement",
+                  "linearVelocity": [3, 0, 0] ,
+                  "id": "right"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [-24, -1.2, 1.25],
               "scale": [1, 1, 0.5],
               "name": "log",
               "components": [
@@ -775,7 +793,45 @@
             },
             {
               "rotation": [0, 90, 0],
-              "position": [0, -1.2, -6.75],
+              "position": [-19, -1.2, 1.25],
+              "scale": [1, 1, 0.5],
+              "name": "log",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "trunkWood",
+                  "material": "trunkWoodMaterial"
+                },
+                {
+                  "name": "log",
+                  "type": "Movement",
+                  "linearVelocity": [3, 0, 0],
+                  "id": "right"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [-14, -1.2, 1.25],
+              "scale": [1, 1, 0.5],
+              "name": "log",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "trunkWood",
+                  "material": "trunkWoodMaterial"
+                },
+                {
+                  "name": "log",
+                  "type": "Movement",
+                  "linearVelocity": [3, 0, 0],
+                  "id": "right"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [30, -1.2, -6.75],
               "scale": [1, 1, 0.5],
               "name": "log",
               "components": [
@@ -794,7 +850,121 @@
             },
             {
               "rotation": [0, 90, 0],
-              "position": [0, -1.2, -7.75],
+              "position": [24, -1.2, -6.75],
+              "scale": [1, 1, 0.5],
+              "name": "log",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "trunkWood",
+                  "material": "trunkWoodMaterial"
+                },
+                {
+                  "name": "reverseLog",
+                  "type": "Movement",
+                  "linearVelocity": [3, 0, 0] ,
+                  "id": "left"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [19, -1.2, -6.75],
+              "scale": [1, 1, 0.5],
+              "name": "log",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "trunkWood",
+                  "material": "trunkWoodMaterial"
+                },
+                {
+                  "name": "reverseLog",
+                  "type": "Movement",
+                  "linearVelocity": [3, 0, 0] ,
+                  "id": "left"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [13, -1.2, -6.75],
+              "scale": [1, 1, 0.5],
+              "name": "log",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "trunkWood",
+                  "material": "trunkWoodMaterial"
+                },
+                {
+                  "name": "reverseLog",
+                  "type": "Movement",
+                  "linearVelocity": [3, 0, 0] ,
+                  "id": "left"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [-30, -1.2, -7.75],
+              "scale": [1, 1, 0.5],
+              "name": "log",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "trunkWood",
+                  "material": "trunkWoodMaterial"
+                },
+                {
+                  "name": "log",
+                  "type": "Movement",
+                  "linearVelocity": [3, 0, 0] ,
+                  "id": "right"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [-25, -1.2, -7.75],
+              "scale": [1, 1, 0.5],
+              "name": "log",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "trunkWood",
+                  "material": "trunkWoodMaterial"
+                },
+                {
+                  "name": "log",
+                  "type": "Movement",
+                  "linearVelocity": [3, 0, 0] ,
+                  "id": "right"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [-20, -1.2, -7.75],
+              "scale": [1, 1, 0.5],
+              "name": "log",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "trunkWood",
+                  "material": "trunkWoodMaterial"
+                },
+                {
+                  "name": "log",
+                  "type": "Movement",
+                  "linearVelocity": [3, 0, 0] ,
+                  "id": "right"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [-15, -1.2, -7.75],
               "scale": [1, 1, 0.5],
               "name": "log",
               "components": [

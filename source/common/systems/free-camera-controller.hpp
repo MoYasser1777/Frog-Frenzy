@@ -25,6 +25,12 @@ namespace our
         bool mouse_locked = false; // Is the mouse locked
         int maxHeightWin = 10;
         bool frogAboveTrunk = false;
+        float levelWidth = 17.0f;                                     // The width of the level
+        float levelStart = 12.0f;                                     // The start of the level
+        float levelEnd[5] = {-10.0f, -16.0f, -16.0f, -16.0f, -25.0f}; // The end of the levels
+        float waterWidth = 2.0f;                                      // The width of the water
+        float widthLeft = -8.f;                                       // left width of the level
+        float widthRight = 8.f;                                       // right width of the level
 
     public:
         // When a state enters, it should call this function and give it the pointer to the application
@@ -106,6 +112,9 @@ namespace our
 
             Entity * frog = nullptr;
             Entity *woodenBox = nullptr;
+            Entity *brickWall = nullptr;
+            Entity *pipe = nullptr;
+
             std::vector<Entity *> logs;
             for (auto entity : world->getEntities())
             {
@@ -119,6 +128,12 @@ namespace our
                 }else if (name == "woodenBox")
                 {
                     woodenBox = entity;
+                }else if (name == "brickWall")
+                {
+                    brickWall = entity;
+                }else if (name == "pipe")
+                {
+                    pipe = entity;
                 }
             }
             if (!frog)
@@ -159,6 +174,9 @@ namespace our
                 // UP
                 if (app->getKeyboard().isPressed(GLFW_KEY_UP))
                 {
+                    if (frog->localTransform.position.z < levelEnd[0] &&  !(frog->localTransform.position.x - woodenBox->localTransform.position.x < 1.0f &&
+                frog->localTransform.position.x - woodenBox->localTransform.position.x > -1.0f) )
+                        return;
                      // update the camera position
                     position += front * (deltaTime * current_sensitivity.z);
                     // update the frog position
@@ -169,6 +187,8 @@ namespace our
                 // DOWN
                 else if (app->getKeyboard().isPressed(GLFW_KEY_DOWN))
                 {
+                    if (frog->localTransform.position.z > levelStart)
+                        return;
                     position -= front * (deltaTime * current_sensitivity.z);
                     frog->localTransform.position -= front * (deltaTime * current_sensitivity.z);
                     frog->localTransform.rotation.y = 0;
@@ -176,6 +196,8 @@ namespace our
                 // RIGHT
                 else if (app->getKeyboard().isPressed(GLFW_KEY_RIGHT))
                 {
+                    if (frog->localTransform.position.x > levelWidth / 2 )
+                        return;
                     position += right * (deltaTime * current_sensitivity.x);
                     frog->localTransform.position += right * (deltaTime * current_sensitivity.x);
                     frog->localTransform.rotation.y = glm::pi<float>() * 0.5f;
@@ -183,6 +205,8 @@ namespace our
                 // LEFT
                 else if (app->getKeyboard().isPressed(GLFW_KEY_LEFT))
                 {
+                    if (frog->localTransform.position.x < -levelWidth / 2)
+                        return;
                     position -= right * (deltaTime * current_sensitivity.x);
                     frog->localTransform.position -= right * (deltaTime * current_sensitivity.x);
                     frog->localTransform.rotation.y = glm::pi<float>() * -0.5f;
@@ -199,11 +223,14 @@ namespace our
                 {
                     frogAboveTrunk = true;
                     MovementComponent * movement = log->getComponent<MovementComponent>();
-                    if(movement->id == "right") {
+                    // take frog right and make it with limits from right
+                    if(movement->id == "right" && frog->localTransform.position.x < levelWidth / 2  ) { 
                         position += right * (deltaTime * movement->linearVelocity.x);
-                        frog->localTransform.position += deltaTime * movement->linearVelocity;
-                    }              
-                    else{
+                        frog->localTransform.position += deltaTime * movement->linearVelocity; 
+                        
+                    }
+                    // take frog left and make it with limits from left
+                    else if (frog->localTransform.position.x > -levelWidth / 2){  
                         position -= right * (deltaTime * movement->linearVelocity.x);
                         frog->localTransform.position -= deltaTime * movement->linearVelocity;
                     }
