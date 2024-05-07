@@ -116,6 +116,7 @@ namespace our
             Entity *pipe = nullptr;
 
             std::vector<Entity *> logs;
+            std::vector<Entity *> cars;
             for (auto entity : world->getEntities())
             {
                 std::string name = entity->name;
@@ -134,6 +135,9 @@ namespace our
                 }else if (name == "pipe")
                 {
                     pipe = entity;
+                }else if (name == "floatingCar" || name == "floatingCarReversed")
+                {
+                    cars.push_back(entity);
                 }
             }
             if (!frog)
@@ -167,9 +171,7 @@ namespace our
             if (app->getKeyboard().isPressed(GLFW_KEY_UP) || app->getKeyboard().isPressed(GLFW_KEY_DOWN) || app->getKeyboard().isPressed(GLFW_KEY_LEFT) || app->getKeyboard().isPressed(GLFW_KEY_RIGHT))
             {
                 // // MOVING   =>  Jump Effect
-                // frog->localTransform.position.y = float(0.05f * sin(glfwGetTime() * 10) + 0.05f) - 1;           // make the frog jump
-                // frog->localTransform.rotation.x = float(0.1f * sin(glfwGetTime() * 10)) - glm::pi<float>() / 2; // make the frog rotate
-                // frog->localTransform.scale.y = 0.01f * sin(glfwGetTime() * 10) + 0.075f;                         // make the frog scale
+                frog->localTransform.position.y = float(0.05f * sin(glfwGetTime() * 10) + 0.05f) - 1.05f;           // make the frog jump
 
                 // UP
                 if (app->getKeyboard().isPressed(GLFW_KEY_UP))
@@ -247,6 +249,34 @@ namespace our
                 frog->localTransform.position.x - woodenBox->localTransform.position.x > -1.0f)
             {
                 app->setGameState(GameState::WIN);
+            }
+                    // check if a car hits the frog
+            for (auto car : cars)
+            {
+                glm::mat4 carTransformationMatrix = car->getLocalToWorldMatrix();
+                glm::vec3 carPosition = glm::vec3(carTransformationMatrix[3]);
+                bool carRight= frog->localTransform.position.x < carPosition.x + 0.5f &&
+                    frog->localTransform.position.x > carPosition.x - 2.0f &&
+                    frog->localTransform.position.z < carPosition.z + 0.5f &&
+                    frog->localTransform.position.z > carPosition.z - 1.1f;
+
+
+                bool carLeft=frog->localTransform.position.x < carPosition.x + 2.0f &&
+                    frog->localTransform.position.x > carPosition.x - 0.5f &&
+                    frog->localTransform.position.z < carPosition.z + 0.75f &&
+                    frog->localTransform.position.z > carPosition.z - 0.85f;
+                if ((car->name =="floatingCar" && carRight )  || (car->name=="floatingCarReversed" && carLeft ))
+                {
+                    app->setGameState(GameState::PLAYING);
+                    auto &config = app->getConfig()["scene"];
+                    if (config.contains("world"))
+                    {
+                        world->clear();
+                        world->deserialize(config["world"]);
+                    }
+                    app->changeState("menu");
+                    
+                }
             }
 
 
