@@ -1051,7 +1051,7 @@
             },
             {
               "rotation": [0, 90, 0],
-              "position": [0, -0.5, 8],
+              "position": [-20, -0.5, 8],
               "scale": [0.3, 0.3, 0.3],
               "name": "floatingCar",
               "components": [
@@ -1059,38 +1059,18 @@
                   "type": "Mesh Renderer",
                   "mesh": "floatingCar",
                   "material": "floatingCar"
-                }
-              ]
-            },
-            {
-              "rotation": [0, -90, 0],
-              "position": [0, -0.5, 6.5],
-              "scale": [0.3, 0.3, 0.3],
-              "name": "floatingCarReversed",
-              "components": [
+                },
                 {
-                  "type": "Mesh Renderer",
-                  "mesh": "floatingCar",
-                  "material": "floatingCar"
-                }
-              ]
-            },
-            {
-              "rotation": [0, -90, 0],
-              "position": [0, -0.5, 5],
-              "scale": [0.3, 0.3, 0.3],
-              "name": "floatingCarReversed",
-              "components": [
-                {
-                  "type": "Mesh Renderer",
-                  "mesh": "floatingCar",
-                  "material": "floatingCar"
+                  "name": "car",
+                  "type": "Movement",
+                  "linearVelocity": [3, 0, 0],
+                  "id": "right"
                 }
               ]
             },
             {
               "rotation": [0, 90, 0],
-              "position": [0, -0.5, -2],
+              "position": [-27, -0.5, 8],
               "scale": [0.3, 0.3, 0.3],
               "name": "floatingCar",
               "components": [
@@ -1098,12 +1078,18 @@
                   "type": "Mesh Renderer",
                   "mesh": "floatingCar",
                   "material": "floatingCar"
+                },
+                {
+                  "name": "car",
+                  "type": "Movement",
+                  "linearVelocity": [3, 0, 0],
+                  "id": "right"
                 }
               ]
             },
             {
               "rotation": [0, -90, 0],
-              "position": [0, -0.5, -3.5],
+              "position": [20, -0.5, 6.5],
               "scale": [0.3, 0.3, 0.3],
               "name": "floatingCarReversed",
               "components": [
@@ -1111,6 +1097,69 @@
                   "type": "Mesh Renderer",
                   "mesh": "floatingCar",
                   "material": "floatingCar"
+                },
+                {
+                  "name": "car",
+                  "type": "Movement",
+                  "linearVelocity": [3, 0, 0],
+                  "id": "left"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [-20, -0.5, 5],
+              "scale": [0.3, 0.3, 0.3],
+              "name": "floatingCar",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "floatingCar",
+                  "material": "floatingCar"
+                },
+                {
+                  "name": "car",
+                  "type": "Movement",
+                  "linearVelocity": [3, 0, 0],
+                  "id": "right"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 90, 0],
+              "position": [-20, -0.5, -2],
+              "scale": [0.3, 0.3, 0.3],
+              "name": "floatingCar",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "floatingCar",
+                  "material": "floatingCar"
+                },
+                {
+                  "name": "car",
+                  "type": "Movement",
+                  "linearVelocity": [3, 0, 0],
+                  "id": "right"
+                }
+              ]
+            },
+            {
+              "rotation": [0, -90, 0],
+              "position": [20, -0.5, -3.5],
+              "scale": [0.3, 0.3, 0.3],
+              "name": "floatingCarReversed",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "floatingCar",
+                  "material": "floatingCar"
+                },
+                {
+                  "name": "car",
+                  "type": "Movement",
+                  "linearVelocity": [3, 0, 0],
+                  "id": "left"
                 }
               ]
             },

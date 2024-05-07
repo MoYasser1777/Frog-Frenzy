@@ -46,6 +46,28 @@ namespace our
                             entity->localTransform.position[0] = 11.0f;
                         }
                     }
+
+                    if (movement->name == "car" && movement->id == "right")
+                    {
+                        if (entity->localTransform.position[0] <= 11.0f)
+                        {
+                            // inside the water
+                            entity->localTransform.position += deltaTime * movement->linearVelocity;
+                        }else{
+                            entity->localTransform.position[0] = -11.0f;
+                        }
+                    }
+
+                    if (movement->name == "car" && movement->id == "left")
+                    {
+                        if (-11.0f <= entity->localTransform.position[0])
+                        {
+                            // inside the water
+                            entity->localTransform.position -= deltaTime * movement->linearVelocity;
+                        }else{
+                            entity->localTransform.position[0] = 11.0f;
+                        }
+                    }
                 }
                 
             }

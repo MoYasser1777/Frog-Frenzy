@@ -267,14 +267,15 @@ namespace our
                     frog->localTransform.position.z > carPosition.z - 0.85f;
                 if ((car->name =="floatingCar" && carRight )  || (car->name=="floatingCarReversed" && carLeft ))
                 {
-                    app->setGameState(GameState::PLAYING);
+                    std::cout<<"ana aho"<<std::endl;
+                    //app->setGameState(GameState::PLAYING); LEH YASTAAAAAAAAAAAAAAAA
                     auto &config = app->getConfig()["scene"];
                     if (config.contains("world"))
                     {
                         world->clear();
                         world->deserialize(config["world"]);
                     }
-                    app->changeState("menu");
+                   app->changeState("menu");
                     
                 }
             }
