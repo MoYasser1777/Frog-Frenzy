@@ -33,7 +33,7 @@
                 "moon": "assets/textures/moon.jpg",
                 "grass": "assets/textures/grass_maze.jpg",
                 "water": "assets/textures/water.jpg",
-                "frog": "assets/textures/frog2.jpg",
+                "frog": "assets/textures/frog.png",
                 "road": "assets/textures/2way.jpg",
                 "road3" : "assets/textures/3way.jpg",
                 "trunkWood": "assets/textures/woodenLog.png",
@@ -50,7 +50,7 @@
               },
               "meshes": {
                 "cube": "assets/models/cube.obj",
-                "frog": "assets/models/frog2.obj",
+                "frog": "assets/models/frog.obj",
                 "plane": "assets/models/plane.obj",
                 "maze": "assets/models/maze.obj",
                 "sphere": "assets/models/sphere.obj",
@@ -379,9 +379,9 @@
               ]
             },
             {
-              "rotation": [-90, 0, 0],
+              "rotation": [0, 180, 0],
               "position": [0, -1, 10],
-              "scale": [0.05, 0.05, 0.05],
+              "scale": [0.5, 0.5, 0.5],
               "name": "frog",
               "components": [
                 {
@@ -389,38 +389,10 @@
                   "mesh": "frog",
                   "material": "frog"
                 }
-              ],
-              "children": [
-                // {
-                //   "rotation": [45, 0, 0],
-                //   "position": [0, -40, 100],
-                //   "components": [
-                //     {
-                //       "type": "Camera"
-                //     },
-                //     {
-                //       "type": "Free Camera Controller"
-                //     }
-                //   ],
-                //   "children": [
-                //     {
-                //       "rotation": [0, 0, 0],
-                //       "position": [0, -10, -2],
-                //       "name": "monkey",
-                //       "components": [
-                //         {
-                //           "type": "Mesh Renderer",
-                //           "mesh": "monkey",
-                //           "material": "monkey"
-                //         }
-                //       ]
-                //     }
-                //   ]
-                // }
               ]
             },
             {
-              "position": [0, 1, 12],
+              "position": [0, 1, 13],
               "components": [
                 {
                   "type": "Camera"
@@ -569,7 +541,7 @@
             },
             {
               "rotation": [0, 90, 0],
-              "position": [0, -3, -11.25],
+              "position": [0, -3, -11.5],
               "scale": [0.5, 0.4, 0.5],
               "name": "woodenBox",
               "components": [
@@ -796,7 +768,8 @@
                 {
                   "name": "log",
                   "type": "Movement",
-                  "linearVelocity": [3, 0, 0]
+                  "linearVelocity": [3, 0, 0],
+                  "id": "right"
                 }
               ]
             },
@@ -814,7 +787,8 @@
                 {
                   "name": "reverseLog",
                   "type": "Movement",
-                  "linearVelocity": [3, 0, 0] 
+                  "linearVelocity": [3, 0, 0] ,
+                  "id": "left"
                 }
               ]
             },
@@ -832,7 +806,8 @@
                 {
                   "name": "log",
                   "type": "Movement",
-                  "linearVelocity": [3, 0, 0] 
+                  "linearVelocity": [3, 0, 0] ,
+                  "id": "right"
                 }
               ]
             },

@@ -21,6 +21,14 @@ namespace our {
         glm::i16vec2 size;
         bool isFullscreen;
     };
+    enum class GameState
+    {
+        PLAYING,
+        GAME_OVER,
+        WIN,
+        PAUSE,
+        FINISH
+    };
 
     class Application; // Forward declaration
 
@@ -60,6 +68,7 @@ namespace our {
         nlohmann::json app_config;           // A Json file that contains all application configuration
 
         std::unordered_map<std::string, State*> states;   // This will store all the states that the application can run
+        GameState gameState = GameState::PLAYING;
         State * currentState = nullptr;         // This will store the current scene that is being run
         State * nextState = nullptr;            // If it is requested to go to another scene, this will contain a pointer to that scene
 
@@ -107,6 +116,16 @@ namespace our {
         // Closes the Application
         void close(){
             glfwSetWindowShouldClose(window, GLFW_TRUE);
+        }
+
+        GameState getGameState()
+        {
+            return gameState;
+        }
+
+        void setGameState(GameState gameState)
+        {
+            this->gameState = gameState;
         }
 
         // Class Getters.

@@ -3,6 +3,7 @@
 #include "../ecs/world.hpp"
 #include "../components/camera.hpp"
 #include "../components/free-camera-controller.hpp"
+#include "../components/movement.hpp"
 
 #include "../application.hpp"
 
@@ -10,6 +11,8 @@
 #include <glm/gtc/constants.hpp>
 #include <glm/trigonometric.hpp>
 #include <glm/gtx/fast_trigonometry.hpp>
+
+#include <chrono>
 
 namespace our
 {
@@ -20,6 +23,8 @@ namespace our
     class FreeCameraControllerSystem {
         Application* app; // The application in which the state runs
         bool mouse_locked = false; // Is the mouse locked
+        int maxHeightWin = 10;
+        bool frogAboveTrunk = false;
 
     public:
         // When a state enters, it should call this function and give it the pointer to the application
@@ -100,6 +105,7 @@ namespace our
             if(app->getKeyboard().isPressed(GLFW_KEY_A)) position -= right * (deltaTime * current_sensitivity.x);
 
             Entity * frog = nullptr;
+            Entity *woodenBox = nullptr;
             std::vector<Entity *> logs;
             for (auto entity : world->getEntities())
             {
@@ -110,16 +116,45 @@ namespace our
                 }else if (name == "log")
                 {
                     logs.push_back(entity);
+                }else if (name == "woodenBox")
+                {
+                    woodenBox = entity;
                 }
             }
             if (!frog)
                 return;
+            if (app->getGameState() == GameState::WIN)
+            {
+                // make wooden box flying when collision with frog
+                glm::vec3 deltaPosition = glm::vec3(0.0f, 5 * deltaTime , 0.0f); 
+                woodenBox->localTransform.position += deltaPosition; // update position of wooden box
+                frog->localTransform.position += deltaPosition;      // update position of frog
+                position += deltaPosition;                           // update position of camera
+
+                if (position.y >= maxHeightWin)
+                {
+                    // finishLevel(world);
+                    //app->changeState("menu");
+                    app->setGameState(GameState::PLAYING);
+                    auto &config = app->getConfig()["scene"];
+                    if (config.contains("world"))
+                    {
+                        world->clear();
+                        world->deserialize(config["world"]);
+                    }
+                }
+                return;
+            }
+
+
+
+            // frog movement
             if (app->getKeyboard().isPressed(GLFW_KEY_UP) || app->getKeyboard().isPressed(GLFW_KEY_DOWN) || app->getKeyboard().isPressed(GLFW_KEY_LEFT) || app->getKeyboard().isPressed(GLFW_KEY_RIGHT))
             {
-                // MOVING   =>  Jump Effect
-                frog->localTransform.position.y = float(0.05f * sin(glfwGetTime() * 10) + 0.05f) - 1;           // make the frog jump
-                frog->localTransform.rotation.x = float(0.1f * sin(glfwGetTime() * 10)) - glm::pi<float>() / 2; // make the frog rotate
-                frog->localTransform.scale.y = 0.01f * sin(glfwGetTime() * 10) + 0.075f;                         // make the frog scale
+                // // MOVING   =>  Jump Effect
+                // frog->localTransform.position.y = float(0.05f * sin(glfwGetTime() * 10) + 0.05f) - 1;           // make the frog jump
+                // frog->localTransform.rotation.x = float(0.1f * sin(glfwGetTime() * 10)) - glm::pi<float>() / 2; // make the frog rotate
+                // frog->localTransform.scale.y = 0.01f * sin(glfwGetTime() * 10) + 0.075f;                         // make the frog scale
 
                 // UP
                 if (app->getKeyboard().isPressed(GLFW_KEY_UP))
@@ -129,30 +164,66 @@ namespace our
                     // update the frog position
                     frog->localTransform.position += front * (deltaTime * current_sensitivity.z);
                     // update the frog direction
-                    frog->localTransform.rotation.y = 0;
+                    frog->localTransform.rotation.y = glm::pi<float>();
                 }
                 // DOWN
                 else if (app->getKeyboard().isPressed(GLFW_KEY_DOWN))
                 {
                     position -= front * (deltaTime * current_sensitivity.z);
                     frog->localTransform.position -= front * (deltaTime * current_sensitivity.z);
-                    frog->localTransform.rotation.y = glm::pi<float>();
+                    frog->localTransform.rotation.y = 0;
                 }
                 // RIGHT
                 else if (app->getKeyboard().isPressed(GLFW_KEY_RIGHT))
                 {
                     position += right * (deltaTime * current_sensitivity.x);
                     frog->localTransform.position += right * (deltaTime * current_sensitivity.x);
-                    frog->localTransform.rotation.y = glm::pi<float>() * -0.5f;
+                    frog->localTransform.rotation.y = glm::pi<float>() * 0.5f;
                 }
                 // LEFT
                 else if (app->getKeyboard().isPressed(GLFW_KEY_LEFT))
                 {
                     position -= right * (deltaTime * current_sensitivity.x);
                     frog->localTransform.position -= right * (deltaTime * current_sensitivity.x);
-                    frog->localTransform.rotation.y = glm::pi<float>() * 0.5f;
+                    frog->localTransform.rotation.y = glm::pi<float>() * -0.5f;
                 }
-        }
+
+            }
+            frogAboveTrunk = false;
+            for (auto log : logs)
+            {
+                if (frog->localTransform.position.x < log->localTransform.position.x + 1.7f &&
+                    frog->localTransform.position.x > log->localTransform.position.x - 1.7f &&
+                    frog->localTransform.position.z < log->localTransform.position.z + 1.0f &&
+                    frog->localTransform.position.z > log->localTransform.position.z - 1.0f)
+                {
+                    frogAboveTrunk = true;
+                    MovementComponent * movement = log->getComponent<MovementComponent>();
+                    if(movement->id == "right") {
+                        position += right * (deltaTime * movement->linearVelocity.x);
+                        frog->localTransform.position += deltaTime * movement->linearVelocity;
+                    }              
+                    else{
+                        position -= right * (deltaTime * movement->linearVelocity.x);
+                        frog->localTransform.position -= deltaTime * movement->linearVelocity;
+                    }
+                        
+
+                    
+                    
+                }
+            }
+            if (
+                frog->localTransform.position.z - woodenBox->localTransform.position.z < 1.0f &&
+                frog->localTransform.position.z - woodenBox->localTransform.position.z > -1.0f &&
+                frog->localTransform.position.x - woodenBox->localTransform.position.x < 1.0f &&
+                frog->localTransform.position.x - woodenBox->localTransform.position.x > -1.0f)
+            {
+                app->setGameState(GameState::WIN);
+            }
+
+
+
         }
 
         // When the state exits, it should call this function to ensure the mouse is unlocked
