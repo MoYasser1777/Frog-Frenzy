@@ -282,7 +282,7 @@ namespace our
                     frog->localTransform.position.z   >  wat->localTransform.position.z - (wat->localTransform.scale[1]) ){
                     
                     //app->setGameState(GameState::PLAYING);
-                    //restartCheckpoint(world,frog);
+                    restartCheckpoint(world,frog, position);
                     std:: cout<<"1"<< std:: endl;
                     // GAMEOVEEEER
                     // auto &config = app->getConfig()["scene"];
@@ -316,7 +316,7 @@ namespace our
                 {
                     //app->setGameState(GameState::PLAYING);
                     //GAME OVEEEEEEER
-                    //restartCheckpoint(world,frog);
+                    restartCheckpoint(world,frog, position);
                     // auto &config = app->getConfig()["scene"];
                     // if (config.contains("world"))
                     // {
@@ -339,6 +339,7 @@ namespace our
                     playAudio("stars.mp3");      //? playing audio at collision detection
                     renderer->effectTwo = true;   
                     lastTimeTakenPostPreprocessed = (float)glfwGetTime();             
+                    app->upgradeCheck();
                 }
             }
             if (glfwGetTime() - lastTimeTakenPostPreprocessed >= 0.25f && (renderer->effectOne || renderer->effectTwo))
@@ -377,7 +378,7 @@ namespace our
         }
 
 
-        void restartCheckpoint(World *world , Entity * frog)
+        void restartCheckpoint(World *world , Entity * frog, glm::vec3 & position)
         {
             this->renderer->effectOne = false;
             std::this_thread::sleep_for(std::chrono::milliseconds(3000));
@@ -393,7 +394,7 @@ namespace our
             }
             else
             {
-                app->setLives(currentLives - 1);
+                //app->setLives(currentLives - 1);
 
                 int currentCheck = app->getChecks();
                 if(currentCheck==1){
@@ -406,6 +407,10 @@ namespace our
                     frog->localTransform.position.z = -39;
                     frog->localTransform.position.x = 0;
                 }
+                position = frog->localTransform.position;
+                position.y += 2;
+                position.z += 3;
+                
             }
         }
 

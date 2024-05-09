@@ -26,6 +26,10 @@ namespace our
                 // If the movement component exists
                 if(movement){
                     // Change the position and rotation based on the linear & angular velocity and delta time.
+                    if (movement->name == "star" || movement->name == "moon" )
+                    {       
+                        entity->localTransform.rotation += deltaTime * movement->angularVelocity;                          
+                    }
                     if (movement->name == "log")
                     {
                         if (entity->localTransform.position[0] <= 11.0f)
