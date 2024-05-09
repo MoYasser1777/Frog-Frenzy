@@ -12,6 +12,8 @@
 
 #include "input/keyboard.hpp"
 #include "input/mouse.hpp"
+#include <irrKlang.h>
+using namespace irrklang;
 
 namespace our {
 
@@ -71,6 +73,10 @@ namespace our {
         GameState gameState = GameState::PLAYING;
         State * currentState = nullptr;         // This will store the current scene that is being run
         State * nextState = nullptr;            // If it is requested to go to another scene, this will contain a pointer to that scene
+        ISoundEngine *soundEngine = nullptr;
+        int lives = 3;
+        int checks = 1;
+        int maxChecks = 4;
 
         
         // Virtual functions to be overrode and change the default behaviour of the application
@@ -126,6 +132,34 @@ namespace our {
         void setGameState(GameState gameState)
         {
             this->gameState = gameState;
+        }
+        ISoundEngine *getSoundEngine()
+        {
+            return this->soundEngine;
+        }
+        void setSoundEngine(ISoundEngine *soundEngine)
+        {
+            this->soundEngine = soundEngine;
+        }
+        int getLives()
+        {
+            return this->lives;
+        }
+        void setLives(int lives){
+            this->lives = lives;
+        }
+        int getChecks()
+        {
+            return checks;
+        }
+        bool upgradeCheck()
+        {
+            if (checks == maxChecks)
+            {
+                return false;
+            }
+            checks++;
+            return true;
         }
 
         // Class Getters.

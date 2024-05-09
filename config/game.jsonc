@@ -47,7 +47,8 @@
                 "pipe" : "assets/textures/pipe.png",
                 "car": "assets/textures/car2.jpg",
                 "floatingCar" : "assets/textures/floatingCar.png",
-                "black" : "assets/textures/black.jpg"
+                "black" : "assets/textures/black.jpg",
+                "star" : "assets/textures/star.png"
               },
               "meshes": {
                 "cube": "assets/models/cube.obj",
@@ -65,7 +66,8 @@
                 "tunnel": "assets/models/tunnel.obj",
                 "pipe" : "assets/models/pipe.obj",
                 "floatingCar" : "assets/models/floatingCar.obj",
-                "truck" : "assets/models/truck.obj"
+                "truck" : "assets/models/truck.obj",
+                "star" : "assets/models/star.obj"
               },
             "samplers":{
                 "default":{},
@@ -361,6 +363,21 @@
                   },
                   "tint": [1, 1, 1, 1],
                   "texture": "black",
+                  "sampler": "default"
+                },
+                "star": {
+                  "type": "textured",
+                  "shader": "textured",
+                  "pipelineState": {
+                    "faceCulling": {
+                      "enabled": false
+                    },
+                    "depthTesting": {
+                      "enabled": true
+                    }
+                  },
+                  "tint": [1, 1, 1, 1],
+                  "texture": "star",
                   "sampler": "default"
                 }
               }
@@ -1627,7 +1644,7 @@
                   "material": "water"
                 }
               ]
-            },
+             },
             {
               "position": [0, -1, -39],
               "rotation": [-90, 0, 90],
@@ -2290,6 +2307,32 @@
                   "type": "Movement",
                   "linearVelocity": [3, 0, 0],
                   "id": "right"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 0, 0],
+              "position": [0, 0, -9],
+              "scale": [0.2, 0.2, 0.2],
+              "name": "star",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "star",
+                  "material": "star"
+                }
+              ]
+            },
+            {
+              "rotation": [0, 0, 0],
+              "position": [0, 0, -39],
+              "scale": [0.2, 0.2, 0.2],
+              "name": "star",
+              "components": [
+                {
+                  "type": "Mesh Renderer",
+                  "mesh": "star",
+                  "material": "star"
                 }
               ]
             }

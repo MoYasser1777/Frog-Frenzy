@@ -6,13 +6,17 @@
 #include "../components/movement.hpp"
 
 #include "../application.hpp"
+#include "forward-renderer.hpp"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
 #include <glm/trigonometric.hpp>
 #include <glm/gtx/fast_trigonometry.hpp>
 
+#include <thread>
 #include <chrono>
+#include <irrKlang.h>
+using namespace irrklang;
 
 namespace our
 {
@@ -25,23 +29,29 @@ namespace our
         bool mouse_locked = false; // Is the mouse locked
         int maxHeightWin = 10;
         bool frogAboveTrunk = false;
-        float levelWidth = 17.0f;                                     // The width of the level
-        float levelStart = 12.0f;                                     // The start of the level
-        float levelEnd[5] = {-10.0f, -16.0f, -16.0f, -16.0f, -25.0f}; // The end of the levels
-        float waterWidth = 2.0f;                                      // The width of the water
-        float widthLeft = -8.f;                                       // left width of the level
-        float widthRight = 8.f;                                       // right width of the level
-
+        bool frogAboveGrass = false;
+        float levelWidth = 17.0f; 
+        float levelStart = 15.0f;                                     // The start of the level
+        float levelEnd[5] = {-200.0f, -16.0f, -16.0f, -16.0f, -25.0f}; // The end of the levels
+        int enteredStars = 1; 
+        float lastTimeTakenPostPreprocessed = 0.0f;
+        ForwardRenderer *renderer = nullptr; 
+        
     public:
         // When a state enters, it should call this function and give it the pointer to the application
         void enter(Application* app){
             this->app = app;
+            ISoundEngine *soundEngine = app->getSoundEngine();
+            if (soundEngine == nullptr)
+                app->setSoundEngine(createIrrKlangDevice());
+            
         }
 
         // This should be called every frame to update all entities containing a FreeCameraControllerComponent 
-        void update(World* world, float deltaTime) {
+        void update(World* world, float deltaTime,ForwardRenderer *renderer) {
             // First of all, we search for an entity containing both a CameraComponent and a FreeCameraControllerComponent
             // As soon as we find one, we break
+             this->renderer = renderer;
             CameraComponent* camera = nullptr;
             FreeCameraControllerComponent *controller = nullptr;
             for(auto entity : world->getEntities()){
@@ -117,6 +127,9 @@ namespace our
 
             std::vector<Entity *> logs;
             std::vector<Entity *> cars;
+            std::vector<Entity *> water;
+            std::vector<Entity *> mazeGrass;
+            std::vector<Entity *> stars;
             for (auto entity : world->getEntities())
             {
                 std::string name = entity->name;
@@ -138,6 +151,15 @@ namespace our
                 }else if (name == "floatingCar" || name == "floatingCarReversed")
                 {
                     cars.push_back(entity);
+                }else if (name == "water")
+                {
+                    water.push_back(entity);
+                }else if (name == "mazeGrass")
+                {
+                    mazeGrass.push_back(entity);
+                }else if (name == "star")
+                {
+                    stars.push_back(entity);
                 }
             }
             if (!frog)
@@ -218,10 +240,10 @@ namespace our
             frogAboveTrunk = false;
             for (auto log : logs)
             {
-                if (frog->localTransform.position.x < log->localTransform.position.x + 1.7f &&
-                    frog->localTransform.position.x > log->localTransform.position.x - 1.7f &&
-                    frog->localTransform.position.z < log->localTransform.position.z + 1.0f &&
-                    frog->localTransform.position.z > log->localTransform.position.z - 1.0f)
+                if (frog->localTransform.position.x < log->localTransform.position.x + log->localTransform.scale[0] &&
+                    frog->localTransform.position.x > log->localTransform.position.x - log->localTransform.scale[0] &&
+                    frog->localTransform.position.z < log->localTransform.position.z + log->localTransform.scale[2] &&
+                    frog->localTransform.position.z > log->localTransform.position.z - log->localTransform.scale[2])
                 {
                     frogAboveTrunk = true;
                     MovementComponent * movement = log->getComponent<MovementComponent>();
@@ -236,21 +258,46 @@ namespace our
                         position -= right * (deltaTime * movement->linearVelocity.x);
                         frog->localTransform.position -= deltaTime * movement->linearVelocity;
                     }
-                        
-
-                    
-                    
                 }
             }
-            if (
-                frog->localTransform.position.z - woodenBox->localTransform.position.z < 1.0f &&
-                frog->localTransform.position.z - woodenBox->localTransform.position.z > -1.0f &&
-                frog->localTransform.position.x - woodenBox->localTransform.position.x < 1.0f &&
-                frog->localTransform.position.x - woodenBox->localTransform.position.x > -1.0f)
+            frogAboveGrass = false;
+            for (auto maze : mazeGrass)
             {
-                app->setGameState(GameState::WIN);
+                if (frog->localTransform.position.x < maze->localTransform.position.x + maze->localTransform.scale[1] &&
+                    frog->localTransform.position.x > maze->localTransform.position.x - maze->localTransform.scale[1] &&
+
+                    frog->localTransform.position.z < maze->localTransform.position.z + maze->localTransform.scale[0] &&
+                    frog->localTransform.position.z > maze->localTransform.position.z - maze->localTransform.scale[0])
+                {
+                    std:: cout<<"0"<< std:: endl;
+                    frogAboveGrass = true;
+                }
             }
-                    // check if a car hits the frog
+
+
+             if (!frogAboveGrass && !frogAboveTrunk)
+                for (auto wat : water)
+                {
+                    if (frog->localTransform.position.z  < (wat->localTransform.scale[1]) + wat->localTransform.position.z &&
+                    frog->localTransform.position.z   >  wat->localTransform.position.z - (wat->localTransform.scale[1]) ){
+                    
+                    //app->setGameState(GameState::PLAYING);
+                    //restartCheckpoint(world,frog);
+                    std:: cout<<"1"<< std:: endl;
+                    // GAMEOVEEEER
+                    // auto &config = app->getConfig()["scene"];
+                    // if (config.contains("world"))
+                    // {
+                    //     world->clear();
+                    //     world->deserialize(config["world"]);
+                    // }
+                    // app->changeState("menu");
+                    
+                    }
+                        
+                }
+
+                // check if a car hits the frog
             for (auto car : cars)
             {
                 glm::mat4 carTransformationMatrix = car->getLocalToWorldMatrix();
@@ -267,23 +314,106 @@ namespace our
                     frog->localTransform.position.z > carPosition.z - 0.85f;
                 if ((car->name =="floatingCar" && carRight )  || (car->name=="floatingCarReversed" && carLeft ))
                 {
-                    std::cout<<"ana aho"<<std::endl;
-                    //app->setGameState(GameState::PLAYING); LEH YASTAAAAAAAAAAAAAAAA
-                    auto &config = app->getConfig()["scene"];
-                    if (config.contains("world"))
-                    {
-                        world->clear();
-                        world->deserialize(config["world"]);
-                    }
-                   app->changeState("menu");
+                    //app->setGameState(GameState::PLAYING);
+                    //GAME OVEEEEEEER
+                    //restartCheckpoint(world,frog);
+                    // auto &config = app->getConfig()["scene"];
+                    // if (config.contains("world"))
+                    // {
+                    //     world->clear();
+                    //     world->deserialize(config["world"]);
+                    // }
+                    // app->changeState("menu");
                     
                 }
             }
 
-
+            for (auto star : stars)
+            {
+                if ((int(frog->localTransform.position.z) == int(star->localTransform.position.z)) &&
+                 (int(frog->localTransform.position.x) == int(star->localTransform.position.x)))
+                {
+                
+                    world->markForRemoval(star); //? removing coin after collision detection
+                    world->deleteMarkedEntities();
+                    playAudio("stars.mp3");      //? playing audio at collision detection
+                    renderer->effectTwo = true;   
+                    lastTimeTakenPostPreprocessed = (float)glfwGetTime();             
+                }
+            }
+            if (glfwGetTime() - lastTimeTakenPostPreprocessed >= 0.25f && (renderer->effectOne || renderer->effectTwo))
+            {
+                renderer->effectOne = false;
+                renderer->effectTwo = false;
+                lastTimeTakenPostPreprocessed = 0.0f;
+            }
+            if (
+                frog->localTransform.position.z - woodenBox->localTransform.position.z < 1.0f &&
+                frog->localTransform.position.z - woodenBox->localTransform.position.z > -1.0f &&
+                frog->localTransform.position.x - woodenBox->localTransform.position.x < 1.0f &&
+                frog->localTransform.position.x - woodenBox->localTransform.position.x > -1.0f)
+            {
+                app->setGameState(GameState::WIN);
+            }
 
         }
 
+        void playAudio(std::string audioFileName, bool repeat = false, bool stopAll = false)
+        {
+            ISoundEngine *soundEngine = app->getSoundEngine();
+            std::string audioPath = "sounds/" + audioFileName;
+            if (!soundEngine)
+                return;
+            if (stopAll)
+            {
+                soundEngine->stopAllSounds();
+            }
+            if (!soundEngine->isCurrentlyPlaying(audioPath.c_str()))
+            {
+                // repeat is a boolean
+                // when this boolean is true the audio repeats after it's finished
+                soundEngine->play2D(audioPath.c_str(), repeat);
+            }
+        }
+
+
+        void restartCheckpoint(World *world , Entity * frog)
+        {
+            this->renderer->effectOne = false;
+            std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+            app->setGameState(GameState::PLAYING);
+            int currentLives = app->getLives();
+            // auto &config = app->getConfig()["scene"];
+            // std::string levelName;
+            if (currentLives == 0)
+            {
+                playAudio("game_over.mp3", false, true);
+                //app->changeState("end-game");
+                return;
+            }
+            else
+            {
+                app->setLives(currentLives - 1);
+
+                int currentCheck = app->getChecks();
+                if(currentCheck==1){
+                    frog->localTransform.position.z = 10;
+                    frog->localTransform.position.x = 0;
+                }else if(currentCheck == 2){
+                    frog->localTransform.position.z = -9;
+                    frog->localTransform.position.x = 0;
+                }else if(currentCheck == 3){
+                    frog->localTransform.position.z = -39;
+                    frog->localTransform.position.x = 0;
+                }
+            }
+        }
+
+        void resetCheckpoints()
+        {
+            
+            enteredStars = 1;
+        }
         // When the state exits, it should call this function to ensure the mouse is unlocked
         void exit(){
             if(mouse_locked) {
