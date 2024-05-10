@@ -186,6 +186,11 @@ namespace our
                 }
                 return;
             }
+            if (app->getGameState() == GameState::GAME_OVER)
+            {
+                restartCheckpoint(world,frog, position);
+                return;
+            }
 
 
 
@@ -282,7 +287,8 @@ namespace our
                     frog->localTransform.position.z   >  wat->localTransform.position.z - (wat->localTransform.scale[1]) ){
                     
                     //app->setGameState(GameState::PLAYING);
-                    restartCheckpoint(world,frog, position);
+                    //restartCheckpoint(world,frog, position);
+                    gameOver();
                     std:: cout<<"1"<< std:: endl;
                     // GAMEOVEEEER
                     // auto &config = app->getConfig()["scene"];
@@ -316,7 +322,8 @@ namespace our
                 {
                     //app->setGameState(GameState::PLAYING);
                     //GAME OVEEEEEEER
-                    restartCheckpoint(world,frog, position);
+                    //restartCheckpoint(world,frog, position);
+                    gameOver();
                     // auto &config = app->getConfig()["scene"];
                     // if (config.contains("world"))
                     // {
@@ -413,7 +420,19 @@ namespace our
                 
             }
         }
+        //  When the frog hits the water, collides with a car, or runs out of time, the game is over.
+        void gameOver()
+        {
+            // if (monkey) // replace with a skelton
+            // {
+            //     monkey->localTransform.position.y = 0;
+            // }
+            this->renderer->effectOne = true;
+            lastTimeTakenPostPreprocessed = (float)glfwGetTime();
+            app->setGameState(GameState::GAME_OVER);
 
+            //playAudio("game_over.ogg");
+        }
         void resetCheckpoints()
         {
             
