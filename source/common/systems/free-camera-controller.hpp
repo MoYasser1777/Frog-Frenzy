@@ -36,6 +36,10 @@ namespace our
         int enteredStars = 1; 
         float lastTimeTakenPostPreprocessed = 0.0f;
         ForwardRenderer *renderer = nullptr; 
+        Entity * skeleton= nullptr;
+        std::vector<Entity *> stars;
+        bool repositionFrogCheck = false;
+        bool validStar[2]={true, true};
         
     public:
         // When a state enters, it should call this function and give it the pointer to the application
@@ -129,7 +133,7 @@ namespace our
             std::vector<Entity *> cars;
             std::vector<Entity *> water;
             std::vector<Entity *> mazeGrass;
-            std::vector<Entity *> stars;
+
             for (auto entity : world->getEntities())
             {
                 std::string name = entity->name;
@@ -160,6 +164,8 @@ namespace our
                 }else if (name == "star")
                 {
                     stars.push_back(entity);
+                }else if (name == "monkey"){
+                    skeleton = entity;
                 }
             }
             if (!frog)
@@ -188,7 +194,7 @@ namespace our
             }
             if (app->getGameState() == GameState::GAME_OVER)
             {
-                restartCheckpoint(world,frog, position);
+                restartCheckpoint(world);
                 return;
             }
 
@@ -334,19 +340,27 @@ namespace our
                     
                 }
             }
-
+            if(repositionFrogCheck){
+                repositionFrog(frog,position, world);
+                repositionFrogCheck = false;
+            }
             for (auto star : stars)
             {
                 if ((int(frog->localTransform.position.z) == int(star->localTransform.position.z)) &&
                  (int(frog->localTransform.position.x) == int(star->localTransform.position.x)))
                 {
                 
-                    world->markForRemoval(star); //? removing coin after collision detection
+                    world->markForRemoval(star); //? removing star after collision detection
                     world->deleteMarkedEntities();
+                    star->localTransform.position.y = -5;
+                    if(validStar[app->getChecks()-1]){
                     playAudio("stars.mp3");      //? playing audio at collision detection
                     renderer->effectTwo = true;   
                     lastTimeTakenPostPreprocessed = (float)glfwGetTime();             
                     app->upgradeCheck();
+                    validStar[app->getChecks()-1] = false;
+                    }
+                    
                 }
             }
             if (glfwGetTime() - lastTimeTakenPostPreprocessed >= 0.25f && (renderer->effectOne || renderer->effectTwo))
@@ -355,6 +369,8 @@ namespace our
                 renderer->effectTwo = false;
                 lastTimeTakenPostPreprocessed = 0.0f;
             }
+
+
             if (
                 frog->localTransform.position.z - woodenBox->localTransform.position.z < 1.0f &&
                 frog->localTransform.position.z - woodenBox->localTransform.position.z > -1.0f &&
@@ -385,13 +401,13 @@ namespace our
         }
 
 
-        void restartCheckpoint(World *world , Entity * frog, glm::vec3 & position)
+        void restartCheckpoint(World *world )
         {
             this->renderer->effectOne = false;
             std::this_thread::sleep_for(std::chrono::milliseconds(3000));
             app->setGameState(GameState::PLAYING);
             int currentLives = app->getLives();
-            // auto &config = app->getConfig()["scene"];
+            auto &config = app->getConfig()["scene"];
             // std::string levelName;
             if (currentLives == 0)
             {
@@ -403,35 +419,50 @@ namespace our
             {
                 //app->setLives(currentLives - 1);
 
+            }
+                // If we have a world in the scene config, we use it to populate our world
+                if(config.contains("world")){
+                    world->clear();
+                    world->deserialize(config["world"]);
+                    repositionFrogCheck = true;
+                    
+                }
+
+
+        }
+        void repositionFrog( Entity * frog, glm::vec3 & position, World* world){
                 int currentCheck = app->getChecks();
                 if(currentCheck==1){
                     frog->localTransform.position.z = 10;
                     frog->localTransform.position.x = 0;
                 }else if(currentCheck == 2){
+                    world->markForRemoval(stars[0]); //? removing star after collision detection
+                    world->deleteMarkedEntities();
                     frog->localTransform.position.z = -9;
-                    frog->localTransform.position.x = 0;
+                    frog->localTransform.position.x = 5;
                 }else if(currentCheck == 3){
+                    world->markForRemoval(stars[1]); //? removing star after collision detection
+                    world->deleteMarkedEntities();
                     frog->localTransform.position.z = -39;
                     frog->localTransform.position.x = 0;
                 }
                 position = frog->localTransform.position;
                 position.y += 2;
                 position.z += 3;
-                
-            }
         }
         //  When the frog hits the water, collides with a car, or runs out of time, the game is over.
         void gameOver()
         {
-            // if (monkey) // replace with a skelton
-            // {
-            //     monkey->localTransform.position.y = 0;
-            // }
+            if (skeleton) // replace with a skelton
+            {
+                skeleton->localTransform.position.y = 0;
+                
+            }
             this->renderer->effectOne = true;
             lastTimeTakenPostPreprocessed = (float)glfwGetTime();
             app->setGameState(GameState::GAME_OVER);
 
-            //playAudio("game_over.ogg");
+            playAudio("game_over.mp3");
         }
         void resetCheckpoints()
         {

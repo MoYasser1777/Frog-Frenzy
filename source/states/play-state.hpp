@@ -33,7 +33,28 @@ class Playstate: public our::State {
         auto size = getApp()->getFrameBufferSize();
         renderer.initialize(size, config["renderer"]);
     }
+    void onImmediateGui() override
+    {
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+        // Box 1
+        ImGui::SetNextWindowPos(ImVec2(20, 20)); // Set position of Box 1
+        ImGui::Begin("HealthName", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground);
+        ImGui::SetWindowSize(ImVec2(250, 80));
+        ImGui::SetWindowFontScale(3.0f);
+        ImGui::TextColored(ImVec4(0.0, 1.0, 0.0, 1.0), "Your Health: ");
+        ImGui::End();
 
+        // // Box 2
+        ImGui::SetNextWindowPos(ImVec2(270, 20)); // Set position of Box 2
+        ImGui::Begin("HealthValue", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground);
+        ImGui::SetWindowSize(ImVec2(100, 50));
+        ImGui::SetWindowFontScale(3.0f);
+        ImGui::TextColored(ImVec4(1.0, 1.0, 1.0, 1.0), std::to_string(getApp()->getLives()).c_str());
+        ImGui::End();
+        ImGui::PopStyleColor();
+
+        
+    }
     void onDraw(double deltaTime) override {
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
