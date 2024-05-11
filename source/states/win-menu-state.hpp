@@ -104,7 +104,10 @@ class winMenuState: public our::State {
         // - The body {} which contains the code to be executed. 
         buttons[0].position = {150.0f, 290.0f};
         buttons[0].size = {660.0f, 85.0f};
-        buttons[0].action = [this](){this->getApp()->changeState("play");};
+        buttons[0].action = [this](){
+        this->getApp()->setGameState(our::GameState:: PLAYING); 
+        this->getApp()->changeState("play");
+        };
 
         buttons[1].position = {155.0f, 420.0f};
         buttons[1].size = {570.0f, 55.0f};

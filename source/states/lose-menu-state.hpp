@@ -104,7 +104,9 @@ class loseMenuState: public our::State {
         // - The body {} which contains the code to be executed. 
         buttons[0].position = {120.0f, 260.0f};
         buttons[0].size = {655.0f, 90.0f};
-        buttons[0].action = [this](){this->getApp()->changeState("play");};
+        buttons[0].action = [this](){
+            this->getApp()->setGameState(our::GameState:: PLAYING); 
+            this->getApp()->changeState("play");};
 
         buttons[1].position = {125.0f, 420.0f};
         buttons[1].size = {585.0f, 58.0f};

@@ -113,7 +113,7 @@ class pauseMenuState: public our::State {
                 // cameraController.frog = getApp()->frog;
                 // cameraController.position = getApp()->position;
                 // cameraController.rotation = getApp()->rotation;
-                getApp()->setGameState(our::GameState::PLAYING);
+                //getApp()->setGameState(our::GameState::PLAYING);
                 this->getApp()->changeState("play");
             }
 

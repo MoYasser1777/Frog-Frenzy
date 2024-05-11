@@ -100,15 +100,9 @@ class Playstate: public our::State {
         ImGui::SetWindowSize(ImVec2(150, 100)); 
         ImGui::SetWindowFontScale(4.0f);
         if (ImGui::Button("||", ImVec2(-1, 80))) { 
-             if (getApp()->getGameState() == our::GameState::PLAYING)
-            {
                 getApp()->setGameState(our::GameState::PAUSE);
                 getApp()->setTimeDiffOnPause(getApp()->getTimeDiff());
-                // getApp()->frog = cameraController.frog;
-                // getApp()->position = cameraController.position;
-                // getApp()->rotation = cameraController.rotation;
                 getApp()->changeState("pause");
-            }
             
             
         }

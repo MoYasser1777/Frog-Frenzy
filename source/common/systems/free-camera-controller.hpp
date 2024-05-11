@@ -58,7 +58,7 @@ namespace our
         void update(World* world, float deltaTime,ForwardRenderer *renderer) {
             // First of all, we search for an entity containing both a CameraComponent and a FreeCameraControllerComponent
             // As soon as we find one, we break
-             this->renderer = renderer;
+            this->renderer = renderer;
             CameraComponent* camera = nullptr;
             FreeCameraControllerComponent *controller = nullptr;
             for(auto entity : world->getEntities()){
@@ -192,15 +192,8 @@ namespace our
 
                 if (position.y >= maxHeightWin)
                 {
-                    // finishLevel(world);
-                    //app->changeState("menu");
-                    app->setGameState(GameState::PLAYING);
-                    auto &config = app->getConfig()["scene"];
-                    if (config.contains("world"))
-                    {
-                        world->clear();
-                        world->deserialize(config["world"]);
-                    }
+                    app->changeState("win");
+                    
                 }
                 return;
             }
@@ -311,20 +304,16 @@ namespace our
                     if (frog->localTransform.position.z  < (wat->localTransform.scale[1]) + wat->localTransform.position.z &&
                     frog->localTransform.position.z   >  wat->localTransform.position.z - (wat->localTransform.scale[1]) ){
                     
-                    //app->setGameState(GameState::PLAYING);
-                    //restartCheckpoint(world,frog, position);
+
                     
                     skullDelay = 0.85f;
-                    gameOver(skullDelay);
-                    std:: cout<<"1"<< std:: endl;
-                    // GAMEOVEEEER
-                    // auto &config = app->getConfig()["scene"];
-                    // if (config.contains("world"))
-                    // {
-                    //     world->clear();
-                    //     world->deserialize(config["world"]);
-                    // }
-                    // app->changeState("menu");
+                     if(app->getLives() == 1)
+                     {
+                        app->changeState("lose");
+                        return;
+                    }else{
+                        gameOver(skullDelay);
+                    }
                     
                     }
                         
@@ -355,21 +344,21 @@ namespace our
                         skullDelay = 0.32f;
                     else
                         skullDelay = 0.0f;
-                    gameOver(skullDelay);
-                    // auto &config = app->getConfig()["scene"];
-                    // if (config.contains("world"))
-                    // {
-                    //     world->clear();
-                    //     world->deserialize(config["world"]);
-                    // }
-                    // app->changeState("menu");
+                        if(app->getLives() == 1){
+                            app->changeState("lose");
+                            return;
+
+                        }else{
+                            gameOver(skullDelay);
+                        }
                     
                 }
             }
 
             if (app->getTimeDiff() <= 0)
             {
-                this->gameOver(0.0f);
+                app->changeState("lose");
+                return;
             }
 
             if(repositionFrogCheck){
@@ -445,25 +434,15 @@ namespace our
             app->setGameState(GameState::PLAYING);
             int currentLives = app->getLives();
             auto &config = app->getConfig()["scene"];
-            // std::string levelName;
-            if (currentLives == 0)
-            {
-                playAudio("game_over.mp3", false, true);
-                //app->changeState("end-game");
-                return;
-            }
-            else
-            {
-                //app->setLives(currentLives - 1);
+            app->setLives(currentLives - 1);
 
+            // If we have a world in the scene config, we use it to populate our world
+            if(config.contains("world")){
+                world->clear();
+                world->deserialize(config["world"]);
+                repositionFrogCheck = true;
+                
             }
-                // If we have a world in the scene config, we use it to populate our world
-                if(config.contains("world")){
-                    world->clear();
-                    world->deserialize(config["world"]);
-                    repositionFrogCheck = true;
-                    
-                }
 
 
         }
@@ -496,7 +475,7 @@ namespace our
             lastTimeTakenPostPreprocessed = (float)glfwGetTime();
             lastTimeTakenPostPreprocessed += deltaTime;
             
-           app->setGameState(GameState::GAME_OVER);
+            app->setGameState(GameState::GAME_OVER);
 
             playAudio("game_over.mp3");
         }

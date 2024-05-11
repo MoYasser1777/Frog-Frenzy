@@ -334,8 +334,14 @@ int our::Application::run(int run_for_frames) {
             currentState = nextState;
             nextState = nullptr;
             // Initialize the new scene
-            // if(prevState == states["pause"] && currentState != states["play"])
+            if(!(currentState == states["play"] && gameState == GameState::PAUSE) )
+                {
+                std::cout<<"oninitialized called"<< std::endl;
                 currentState->onInitialize();
+                }else{
+                    gameState = GameState::PLAYING;
+                }
+                
         }
 
         ++current_frame;
