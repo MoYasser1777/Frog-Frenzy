@@ -35,6 +35,8 @@ class Playstate: public our::State {
     }
     void onImmediateGui() override
     {
+
+        //HEALTH//
         ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
         // Box 1
         ImGui::SetNextWindowPos(ImVec2(20, 20)); // Set position of Box 1
@@ -53,6 +55,46 @@ class Playstate: public our::State {
         ImGui::End();
         ImGui::PopStyleColor();
 
+        //CHECKPOINT//
+
+        // // Box 3
+        ImGui::SetNextWindowPos(ImVec2(500, 20));
+        ImGui::Begin("CheckPoint", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground);
+        ImGui::SetWindowSize(ImVec2(250, 50));
+        ImGui::SetWindowFontScale(3.0f);
+        ImGui::TextColored(ImVec4(0.0, 1.0, 0.0, 1.0), "Checkpoint");
+        ImGui::End();
+
+        // // Box 4
+        ImGui::SetNextWindowPos(ImVec2(575, 65));
+        ImGui::Begin("CheckPointValue", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground);
+        ImGui::SetWindowSize(ImVec2(100, 50));
+        ImGui::SetWindowFontScale(3.0f);
+        std::string checkpointString = std::to_string(getApp()->getChecks()) + "/3";
+        ImGui::TextColored(ImVec4(0.0, 1.0, 0.0, 1.0), checkpointString.c_str());
+        ImGui::End();
+
+        //TIMER//
+
+        // Box 5
+        ImGui::SetNextWindowPos(ImVec2(900, 20));
+        ImGui::Begin("TimerValue", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground);
+        ImGui::SetWindowSize(ImVec2(150, 50));
+        ImGui::SetWindowFontScale(3.0f);
+        ImGui::TextColored(ImVec4(0.0, 1.0, 0.0, 1.0), "Timer");
+        ImGui::End();
+
+        //PAUSE//
+
+        ImGui::SetNextWindowPos(ImVec2(1100, 20));
+        ImGui::Begin("Pause", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground);
+        ImGui::SetWindowSize(ImVec2(150, 100)); 
+        ImGui::SetWindowFontScale(4.0f);
+        if (ImGui::Button("||", ImVec2(-1, 80))) { 
+            getApp()->changeState("pause");
+        }
+        ImGui::End();
+
         
     }
     void onDraw(double deltaTime) override {
@@ -67,9 +109,9 @@ class Playstate: public our::State {
 
         if(keyboard.justPressed(GLFW_KEY_ESCAPE)){
             // If the escape  key is pressed in this frame, go to the play state
-            getApp()->changeState("menu");
+            getApp()->changeState("pause");
         }
-    }
+        }
 
     void onDestroy() override {
         // Don't forget to destroy the renderer
@@ -80,5 +122,5 @@ class Playstate: public our::State {
         world.clear();
         // and we delete all the loaded assets to free memory on the RAM and the VRAM
         our::clearAllAssets();
-    }
+   }
 };

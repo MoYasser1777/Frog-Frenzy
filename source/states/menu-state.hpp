@@ -59,7 +59,7 @@ class Menustate: public our::State {
         menuMaterial->shader->attach("assets/shaders/textured.frag", GL_FRAGMENT_SHADER);
         menuMaterial->shader->link();
         // Then we load the menu texture
-        menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu_test.png");
+        menuMaterial->texture = our::texture_utils::loadImage("assets/textures/main_menu.png");
         // Initially, the menu material will be black, then it will fade in
         menuMaterial->tint = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
 
@@ -102,12 +102,12 @@ class Menustate: public our::State {
         // - The argument list () which is the arguments that the lambda should receive when it is called.
         //      We leave it empty since button actions receive no input.
         // - The body {} which contains the code to be executed. 
-        buttons[0].position = {450.0f, 321.0f};
-        buttons[0].size = {305.0f, 70.0f};
+        buttons[0].position = {150.0f, 265.0f};
+        buttons[0].size = {340.0f, 100.0f};
         buttons[0].action = [this](){this->getApp()->changeState("play");};
 
-        buttons[1].position = {555.0f, 550.0f};
-        buttons[1].size = {110.0f, 50.0f};
+        buttons[1].position = {150.0f, 440.0f};
+        buttons[1].size = {170.0f, 67.0f};
         buttons[1].action = [this](){this->getApp()->close();};
 
         sound = createIrrKlangDevice();
@@ -115,7 +115,7 @@ class Menustate: public our::State {
         if (!sound)
             std::cout << "Audio Failed" << std::endl;
         else
-            sound->play2D("./sounds/zelda.mp3", true);
+            sound->play2D("./sounds/menu.mp3", true);
     }
 
     void onDraw(double deltaTime) override {

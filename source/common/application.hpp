@@ -154,11 +154,11 @@ namespace our {
         }
         bool upgradeCheck()
         {
+            checks++;
             if (checks == maxChecks)
             {
                 return false;
             }
-            checks++;
             return true;
         }
 
