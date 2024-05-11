@@ -329,6 +329,10 @@ int our::Application::run(int run_for_frames) {
                 
                 currentState->onDestroy();
             }
+            if(currentState == states["pause"] && nextState == states["menu"]){
+                std::cout<<"ondestroy called"<< std::endl;
+                prevState->onDestroy();
+            }
             // Switch scenes
             prevState = currentState;
             currentState = nextState;

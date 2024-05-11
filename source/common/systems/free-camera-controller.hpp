@@ -41,7 +41,6 @@ namespace our
         bool repositionFrogCheck = false;
         bool validStar[2]={true, true};
         MovementComponent * skullMover = nullptr; 
-        float skullDelay = 0.0f;
         bool skullMoving = false;
         
     public:
@@ -198,7 +197,7 @@ namespace our
                 return;
             }
 
-            if (glfwGetTime() - lastTimeTakenPostPreprocessed >= 0.75f && skullMoving)
+            if (skull->localTransform.position.y >= 0.1f && skullMoving)
             {  
                 skullMoving = false;
                 lastTimeTakenPostPreprocessed = (float)glfwGetTime();                  
@@ -303,15 +302,12 @@ namespace our
                     if (frog->localTransform.position.z  < (wat->localTransform.scale[1]) + wat->localTransform.position.z &&
                     frog->localTransform.position.z   >  wat->localTransform.position.z - (wat->localTransform.scale[1]) ){
                     
-
-                    
-                    skullDelay = 0.85f;
                     //  if(app->getLives() == 1)
                     //  {
                     //     app->changeState("lose");
                     //     return;
                     // }else{
-                    //     gameOver(skullDelay);
+                    //     gameOver();
                     // }
                     
                     }
@@ -335,20 +331,12 @@ namespace our
                     frog->localTransform.position.z > carPosition.z - 0.85f;
                 if ((car->name =="floatingCar" && carRight )  || (car->name=="floatingCarReversed" && carLeft ))
                 {
-                    //app->setGameState(GameState::PLAYING);
-                    //GAME OVEEEEEEER
-                    //restartCheckpoint(world,frog, position);
-                    if((car->name =="floatingCar" && frog->localTransform.position.z < carPosition.z + 0.5f && frog->localTransform.position.z > carPosition.z - 1.1f )  
-                    || (car->name=="floatingCarReversed" && frog->localTransform.position.z < carPosition.z + 0.75f && frog->localTransform.position.z > carPosition.z - 0.85f ))
-                        skullDelay = 0.32f;
-                    else
-                        skullDelay = 0.0f;
                         if(app->getLives() == 1){
                             app->changeState("lose");
                             return;
 
                         }else{
-                            gameOver(skullDelay);
+                            gameOver();
                         }
                     
                 }
@@ -359,7 +347,11 @@ namespace our
                 app->changeState("lose");
                 return;
             }
-
+            if (skullMoving == true)
+            {       
+                skull->localTransform.position += deltaTime * skullMover->linearVelocity; 
+                skull->localTransform.rotation += deltaTime * skullMover->angularVelocity;                          
+            }
             if(repositionFrogCheck){
                 repositionFrog(frog,position, world);
                 repositionFrogCheck = false;
@@ -372,14 +364,14 @@ namespace our
                 
                     world->markForRemoval(star); //? removing star after collision detection
                     world->deleteMarkedEntities();
-                    star->localTransform.position.y = -5;
-                    if(validStar[app->getChecks()-1]){
+                    //star->localTransform.position.y = -5;
+                    // if(validStar[app->getChecks()-1]){
                     playAudio("stars.mp3");      //? playing audio at collision detection
                     renderer->effectTwo = true;   
                     lastTimeTakenPostPreprocessed = (float)glfwGetTime();             
                     app->upgradeCheck();
-                    validStar[app->getChecks()-1] = false;
-                    }
+                    //validStar[app->getChecks()-1] = false;
+                    // }
                     
                 }
             }
@@ -399,11 +391,7 @@ namespace our
                 app->setGameState(GameState::WIN);
             }
 
-            if (skullMoving == true)
-            {       
-                skull->localTransform.position += deltaTime * skullMover->linearVelocity; 
-                skull->localTransform.rotation += deltaTime * skullMover->angularVelocity;                          
-            }
+
 
         }
 
@@ -426,24 +414,22 @@ namespace our
         }
 
 
-        void restartCheckpoint(World *world )
+        void restartCheckpoint(World *world)
         {
             this->renderer->effectOne = false;
-            std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+            //std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+
             app->setGameState(GameState::PLAYING);
             int currentLives = app->getLives();
-            auto &config = app->getConfig()["scene"];
-            app->setLives(currentLives - 1);
+            
+            //app->setLives(currentLives - 1);
 
+            //auto &config = app->getConfig()["scene"];
             // If we have a world in the scene config, we use it to populate our world
-            if(config.contains("world")){
-                world->clear();
-                world->deserialize(config["world"]);
-                repositionFrogCheck = true;
-                
-            }
-
-
+            // if(config.contains("world")){
+            //     world->clear();
+            //     world->deserialize(config["world"]);
+            repositionFrogCheck = true;
         }
         void repositionFrog( Entity * frog, glm::vec3 & position, World* world){
                 int currentCheck = app->getChecks();
@@ -451,37 +437,33 @@ namespace our
                     frog->localTransform.position.z = 10;
                     frog->localTransform.position.x = 0;
                 }else if(currentCheck == 2){
-                    world->markForRemoval(stars[0]); //? removing star after collision detection
-                    world->deleteMarkedEntities();
                     frog->localTransform.position.z = -9;
                     frog->localTransform.position.x = 3;
                 }else if(currentCheck == 3){
-                    world->markForRemoval(stars[1]); //? removing star after collision detection
-                    world->deleteMarkedEntities();
                     frog->localTransform.position.z = -39;
                     frog->localTransform.position.x = 0;
                 }
+                frog->localTransform.rotation.y = glm::pi<float>();
                 position = frog->localTransform.position;
                 position.y += 2;
                 position.z += 3;
+                skull->localTransform.position.y = position.y - 4;
+                skull->localTransform.position.z = position.z - 18;
+                skull->localTransform.rotation.z = 0;
+                skullMoving = false;
         }
         //  When the frog hits the water, collides with a car, or runs out of time, the game is over.
-        void gameOver(float deltaTime)
+        void gameOver()
         {
+
             this->renderer->effectOne = true;
             skullMoving = true;
 
             lastTimeTakenPostPreprocessed = (float)glfwGetTime();
-            lastTimeTakenPostPreprocessed += deltaTime;
             
             app->setGameState(GameState::GAME_OVER);
 
-            playAudio("game_over.mp3");
-        }
-        void resetCheckpoints()
-        {
-            
-            enteredStars = 1;
+            //playAudio("game_over.mp3");
         }
         // When the state exits, it should call this function to ensure the mouse is unlocked
         void exit(){
