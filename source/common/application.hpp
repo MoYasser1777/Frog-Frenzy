@@ -160,6 +160,10 @@ namespace our {
         {
             return checks;
         }
+        void setChecks(int checks)
+        {
+            this->checks = checks;
+        }
         bool upgradeCheck()
         {
             checks++;

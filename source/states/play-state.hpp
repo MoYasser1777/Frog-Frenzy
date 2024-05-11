@@ -51,7 +51,7 @@ class Playstate: public our::State {
         ImGui::Begin("HealthValue", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground);
         ImGui::SetWindowSize(ImVec2(100, 50));
         ImGui::SetWindowFontScale(3.0f);
-        ImGui::TextColored(ImVec4(1.0, 1.0, 1.0, 1.0), std::to_string(getApp()->getLives()).c_str());
+        ImGui::TextColored(ImVec4(0.0, 1.0, 0.0, 1.0), std::to_string(getApp()->getLives()).c_str());
         ImGui::End();
         ImGui::PopStyleColor();
 

@@ -106,12 +106,21 @@ class winMenuState: public our::State {
         buttons[0].size = {660.0f, 85.0f};
         buttons[0].action = [this](){
         this->getApp()->setGameState(our::GameState:: PLAYING); 
+        this->getApp()->setLives(3); 
+        this->getApp()->setChecks(1); 
+        this->getApp()->setCurrentTimeDiff(80);
         this->getApp()->changeState("play");
         };
 
         buttons[1].position = {155.0f, 420.0f};
         buttons[1].size = {570.0f, 55.0f};
-        buttons[1].action = [this](){this->getApp()->changeState("menu");};
+        buttons[1].action = [this](){
+            this->getApp()->setGameState(our::GameState:: PLAYING); 
+            this->getApp()->setLives(3); 
+            this->getApp()->setChecks(1); 
+            this->getApp()->setCurrentTimeDiff(80);
+            this->getApp()->changeState("menu");
+            };
 
         sound = createIrrKlangDevice();
 

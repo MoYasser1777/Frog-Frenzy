@@ -292,7 +292,6 @@ namespace our
                     frog->localTransform.position.z < maze->localTransform.position.z + maze->localTransform.scale[0] &&
                     frog->localTransform.position.z > maze->localTransform.position.z - maze->localTransform.scale[0])
                 {
-                    std:: cout<<"0"<< std:: endl;
                     frogAboveGrass = true;
                 }
             }
@@ -307,13 +306,13 @@ namespace our
 
                     
                     skullDelay = 0.85f;
-                     if(app->getLives() == 1)
-                     {
-                        app->changeState("lose");
-                        return;
-                    }else{
-                        gameOver(skullDelay);
-                    }
+                    //  if(app->getLives() == 1)
+                    //  {
+                    //     app->changeState("lose");
+                    //     return;
+                    // }else{
+                    //     gameOver(skullDelay);
+                    // }
                     
                     }
                         
@@ -455,7 +454,7 @@ namespace our
                     world->markForRemoval(stars[0]); //? removing star after collision detection
                     world->deleteMarkedEntities();
                     frog->localTransform.position.z = -9;
-                    frog->localTransform.position.x = 5;
+                    frog->localTransform.position.x = 3;
                 }else if(currentCheck == 3){
                     world->markForRemoval(stars[1]); //? removing star after collision detection
                     world->deleteMarkedEntities();

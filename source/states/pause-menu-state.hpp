@@ -121,7 +121,13 @@ class pauseMenuState: public our::State {
 
         buttons[1].position = {95.0f, 435.0f};
         buttons[1].size = {655.0f, 60.0f};
-        buttons[1].action = [this](){this->getApp()->changeState("menu");};
+        buttons[1].action = [this](){
+            this->getApp()->setGameState(our::GameState:: PLAYING); 
+            this->getApp()->setLives(3); 
+            this->getApp()->setChecks(1); 
+            this->getApp()->setCurrentTimeDiff(80);
+            this->getApp()->changeState("menu");
+            };
 
         sound = createIrrKlangDevice();
 
