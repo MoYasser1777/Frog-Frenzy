@@ -1,5 +1,6 @@
 #pragma once
 
+// #include "./ecs/world.hpp"
 #include <glm/vec2.hpp>
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
@@ -73,10 +74,17 @@ namespace our {
         GameState gameState = GameState::PLAYING;
         State * currentState = nullptr;         // This will store the current scene that is being run
         State * nextState = nullptr;            // If it is requested to go to another scene, this will contain a pointer to that scene
+        State * prevState = nullptr;
         ISoundEngine *soundEngine = nullptr;
         int lives = 3;
         int checks = 1;
         int maxChecks = 4;
+        int levelDuration = 80;
+        int timerValue = levelDuration;
+        int timeDiff = 80;
+        time_t startTime, endTime;
+        int timeDiffOnPause;
+
 
         
         // Virtual functions to be overrode and change the default behaviour of the application
@@ -86,6 +94,10 @@ namespace our {
         virtual void setupCallbacks();                              // Sets-up the window callback functions from GLFW to our (Mouse/Keyboard) classes.
 
     public:
+        // Entity * frog = nullptr;
+        // glm::vec3 position = glm::vec3(0, 0, 0);
+        // glm::vec3 rotation = glm::vec3(0, 0, 0);
+
 
         // Create an application with following configuration
         Application(const nlohmann::json& app_config) : app_config(app_config) {}
@@ -117,6 +129,7 @@ namespace our {
             if(it != states.end()){
                 nextState = it->second;
             }
+            time(&startTime);
         }
 
         // Closes the Application
@@ -160,6 +173,25 @@ namespace our {
                 return false;
             }
             return true;
+        }
+         void setTimeDiffOnPause(int timeDiff)
+        {
+            this->timeDiffOnPause = timeDiff;
+        }
+        int getTimeDiffOnPause()
+        {
+            return this->timeDiffOnPause;
+        }
+        void setCurrentTimeDiff(int timeDiff)
+        {
+            this->timeDiff = timeDiff;
+            timerValue = timeDiff;
+            time(&startTime);
+        }
+
+        int getTimeDiff()
+        {
+            return timeDiff;
         }
 
         // Class Getters.

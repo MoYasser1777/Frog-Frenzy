@@ -40,7 +40,7 @@
                 "woodenBox": "assets/textures/wooden.png",
                 "rock": "assets/textures/rockTextures/13-ambient_occlusion.png",
                 "rockAmbient": "assets/textures/rockTextures/13-ambient_occlusion.png",
-                "monkey": "assets/textures/monkey.png",
+                "skull": "assets/textures/skull.jpeg",
                 "tire": "assets/textures/tire.jpg",
                 "brickWall": "assets/textures/kadyWall.png",
                 "stone": "assets/textures/stone.jpg",
@@ -61,7 +61,7 @@
                 "woodenBox": "assets/models/wooden.obj",
                 "tire": "assets/models/sphere.obj",
                 "rock": "assets/models/rock.obj",
-                "monkey": "assets/models/monkey.obj",
+                "skull": "assets/models/skull.obj",
                 "wall": "assets/models/wall.obj",
                 "tunnel": "assets/models/tunnel.obj",
                 "pipe" : "assets/models/pipe.obj",
@@ -282,7 +282,7 @@
                   "texture": "woodenBox",
                   "sampler": "default"
                 },
-                "monkey": {
+                "skull": {
                   "type": "textured",
                   "shader": "textured",
                   "pipelineState": {
@@ -294,7 +294,7 @@
                     }
                   },
                   "tint": [1, 1, 1, 1],
-                  "texture": "monkey",
+                  "texture": "skull",
                   "sampler": "default"
                 },
                 "car": {
@@ -437,13 +437,21 @@
               "children": [
                 {
                   "rotation": [0, 0, 0],
-                  "position": [0, -10, -2],
-                  "name": "monkey",
+                  "position": [0, -3, -5], //[0, -11.5, -12.5]
+                  "scale": [0.9, 0.9, 0.9],
+                  "name": "skull",
                   "components": [
                     {
                       "type": "Mesh Renderer",
-                      "mesh": "monkey",
-                      "material": "monkey"
+                      "mesh": "skull",
+                      "material": "skull"
+                    }
+                    ,
+                    {
+                      "name": "skull",
+                      "type": "Movement",
+                      "linearVelocity": [0, 2, 2],
+                      "angularVelocity": [0, 0, 230]
                     }
                   ]
                 }
@@ -2454,18 +2462,6 @@
                   "type": "Mesh Renderer",
                   "mesh": "wall",
                   "material": "brickWall"
-                }
-              ]
-            },
-            {
-              "rotation": [0, 0, 0],
-              "position": [0, -10, -2],
-              "name": "monkey",
-              "components": [
-                {
-                  "type": "Mesh Renderer",
-                  "mesh": "monkey",
-                  "material": "monkey"
                 }
               ]
             }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <application.hpp>
+// #include <systems/free-camera-controller.hpp>
 #include <shader/shader.hpp>
 #include <texture/texture2d.hpp>
 #include <texture/texture-utils.hpp>
@@ -37,6 +38,7 @@ struct ButtonPause {
 
 // This state shows how to use some of the abstractions we created to make a menu.
 class pauseMenuState: public our::State {
+    // our::FreeCameraControllerSystem cameraController;
     // Audio played in menu
     ISoundEngine * sound; 
     // A meterial holding the menu shader and the menu texture to draw
@@ -104,7 +106,18 @@ class pauseMenuState: public our::State {
         // - The body {} which contains the code to be executed. 
         buttons[0].position = {85.0f, 275.0f};
         buttons[0].size = {535.0f, 100.0f};
-        buttons[0].action = [this](){this->getApp()->changeState("play");}; //needs logic to keep play state
+        buttons[0].action = [this](){ 
+            if (getApp()->getGameState() == our::GameState::PAUSE)
+            {
+                getApp()->setCurrentTimeDiff(getApp()->getTimeDiffOnPause());
+                // cameraController.frog = getApp()->frog;
+                // cameraController.position = getApp()->position;
+                // cameraController.rotation = getApp()->rotation;
+                getApp()->setGameState(our::GameState::PLAYING);
+                this->getApp()->changeState("play");
+            }
+
+            }; //needs logic to keep play state
 
         buttons[1].position = {95.0f, 435.0f};
         buttons[1].size = {655.0f, 60.0f};

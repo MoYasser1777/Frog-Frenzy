@@ -23,9 +23,8 @@ namespace our
             for(auto entity : world->getEntities()){
                 // Get the movement component if it exists
                 MovementComponent* movement = entity->getComponent<MovementComponent>();
-                // If the movement component exists
                 if(movement){
-                    // Change the position and rotation based on the linear & angular velocity and delta time.
+
                     if (movement->name == "star" || movement->name == "moon" )
                     {       
                         entity->localTransform.rotation += deltaTime * movement->angularVelocity;                          

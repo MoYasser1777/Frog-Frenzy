@@ -408,9 +408,11 @@ namespace our
 
             // attach the fragment shader based on the effect type (fish eye or blur or power up or radial blur or vignette)
             if (effectOne)
-                postprocessShader->attach("assets/shaders/postprocess/chromatic-aberration.frag", GL_FRAGMENT_SHADER);
+                postprocessShader->attach("assets/shaders/postprocess/grayscale.frag", GL_FRAGMENT_SHADER);
             else if (effectTwo)
                 postprocessShader->attach("assets/shaders/postprocess/radial-blur.frag", GL_FRAGMENT_SHADER);
+            else if (effectThree)
+                postprocessShader->attach("assets/shaders/postprocess/win.frag", GL_FRAGMENT_SHADER);
             else
                 postprocessShader->attach("assets/shaders/postprocess/vignette.frag", GL_FRAGMENT_SHADER);
 

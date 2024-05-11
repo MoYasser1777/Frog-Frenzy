@@ -78,10 +78,19 @@ class Playstate: public our::State {
 
         // Box 5
         ImGui::SetNextWindowPos(ImVec2(900, 20));
-        ImGui::Begin("TimerValue", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground);
+        ImGui::Begin("Timer", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground);
         ImGui::SetWindowSize(ImVec2(150, 50));
         ImGui::SetWindowFontScale(3.0f);
         ImGui::TextColored(ImVec4(0.0, 1.0, 0.0, 1.0), "Timer");
+        ImGui::End();
+
+        // // Box 6
+        ImGui::SetNextWindowPos(ImVec2(920, 65));
+        ImGui::Begin("TimerValue", 0, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoBackground);
+        ImGui::SetWindowSize(ImVec2(100, 50));
+        ImGui::SetWindowFontScale(3.0f);
+        std::string TimerString = std::to_string(getApp()->getTimeDiff());
+        ImGui::TextColored(ImVec4(0.0, 1.0, 0.0, 1.0), TimerString.c_str());
         ImGui::End();
 
         //PAUSE//
@@ -91,25 +100,44 @@ class Playstate: public our::State {
         ImGui::SetWindowSize(ImVec2(150, 100)); 
         ImGui::SetWindowFontScale(4.0f);
         if (ImGui::Button("||", ImVec2(-1, 80))) { 
-            getApp()->changeState("pause");
+             if (getApp()->getGameState() == our::GameState::PLAYING)
+            {
+                getApp()->setGameState(our::GameState::PAUSE);
+                getApp()->setTimeDiffOnPause(getApp()->getTimeDiff());
+                // getApp()->frog = cameraController.frog;
+                // getApp()->position = cameraController.position;
+                // getApp()->rotation = cameraController.rotation;
+                getApp()->changeState("pause");
+            }
+            
+            
         }
         ImGui::End();
 
         
     }
     void onDraw(double deltaTime) override {
+        our::GameState state = getApp()->getGameState();
+        if (state != our::GameState::PAUSE){
         // Here, we just run a bunch of systems to control the world logic
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime,&renderer);
         // And finally we use the renderer system to draw the scene
         renderer.render(&world);
-
+        }
         // Get a reference to the keyboard object
         auto& keyboard = getApp()->getKeyboard();
+        
 
         if(keyboard.justPressed(GLFW_KEY_ESCAPE)){
-            // If the escape  key is pressed in this frame, go to the play state
-            getApp()->changeState("pause");
+            if (getApp()->getGameState() == our::GameState::PLAYING)
+            {
+                getApp()->setGameState(our::GameState::PAUSE);
+                getApp()->setTimeDiffOnPause(getApp()->getTimeDiff());
+                // If the escape  key is pressed in this frame, go to the play state
+                getApp()->changeState("pause");
+            }
+
         }
         }
 

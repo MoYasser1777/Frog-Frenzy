@@ -52,6 +52,7 @@ namespace our
         void render(World* world);
         bool effectOne = false;
         bool effectTwo = false;
+        bool effectThree = false;
 
 
     };

@@ -251,6 +251,15 @@ int our::Application::run(int run_for_frames) {
 
         if(currentState) currentState->onImmediateGui(); // Call to run any required Immediate GUI.
 
+        if (currentState == states["play"] && gameState == GameState::PLAYING)
+            {
+                time(&endTime);
+                if (timeDiff != 0) //  stop at 0
+                    {
+                        timeDiff = int(timerValue - abs(startTime - endTime));
+                        std::cout<< timeDiff <<std::endl;
+                    }
+            }
         // If ImGui is using the mouse or keyboard, then we don't want the captured events to affect our keyboard and mouse objects.
         // For example, if you're focusing on an input and writing "W", the keyboard object shouldn't record this event.
         keyboard.setEnabled(!io.WantCaptureKeyboard, window);
@@ -315,12 +324,18 @@ int our::Application::run(int run_for_frames) {
         // If a scene change was requested, apply it
         while(nextState){
             // If a scene was already running, destroy it (not delete since we can go back to it later)
-            if(currentState) currentState->onDestroy();
+            if(currentState && nextState != states["pause"]) 
+            {
+                
+                currentState->onDestroy();
+            }
             // Switch scenes
+            prevState = currentState;
             currentState = nextState;
             nextState = nullptr;
             // Initialize the new scene
-            currentState->onInitialize();
+            // if(prevState == states["pause"] && currentState != states["play"])
+                currentState->onInitialize();
         }
 
         ++current_frame;

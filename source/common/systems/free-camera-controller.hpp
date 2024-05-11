@@ -36,10 +36,13 @@ namespace our
         int enteredStars = 1; 
         float lastTimeTakenPostPreprocessed = 0.0f;
         ForwardRenderer *renderer = nullptr; 
-        Entity * skeleton= nullptr;
+        Entity * skull= nullptr;
         std::vector<Entity *> stars;
         bool repositionFrogCheck = false;
         bool validStar[2]={true, true};
+        MovementComponent * skullMover = nullptr; 
+        float skullDelay = 0.0f;
+        bool skullMoving = false;
         
     public:
         // When a state enters, it should call this function and give it the pointer to the application
@@ -47,7 +50,7 @@ namespace our
             this->app = app;
             ISoundEngine *soundEngine = app->getSoundEngine();
             if (soundEngine == nullptr)
-                app->setSoundEngine(createIrrKlangDevice());
+                app->setSoundEngine(createIrrKlangDevice()); 
             
         }
 
@@ -134,6 +137,8 @@ namespace our
             std::vector<Entity *> water;
             std::vector<Entity *> mazeGrass;
 
+            
+
             for (auto entity : world->getEntities())
             {
                 std::string name = entity->name;
@@ -164,10 +169,17 @@ namespace our
                 }else if (name == "star")
                 {
                     stars.push_back(entity);
-                }else if (name == "monkey"){
-                    skeleton = entity;
+                }else if (name == "skull"){
+                    skull = entity;
+                    skullMover = entity->getComponent<MovementComponent>();
                 }
+                
             }
+
+            
+
+            
+
             if (!frog)
                 return;
             if (app->getGameState() == GameState::WIN)
@@ -192,7 +204,14 @@ namespace our
                 }
                 return;
             }
-            if (app->getGameState() == GameState::GAME_OVER)
+
+            if (glfwGetTime() - lastTimeTakenPostPreprocessed >= 0.75f && skullMoving)
+            {  
+                skullMoving = false;
+                lastTimeTakenPostPreprocessed = (float)glfwGetTime();                  
+            }
+
+            if (app->getGameState() == GameState::GAME_OVER && !skullMoving)
             {
                 restartCheckpoint(world);
                 return;
@@ -201,7 +220,7 @@ namespace our
 
 
             // frog movement
-            if (app->getKeyboard().isPressed(GLFW_KEY_UP) || app->getKeyboard().isPressed(GLFW_KEY_DOWN) || app->getKeyboard().isPressed(GLFW_KEY_LEFT) || app->getKeyboard().isPressed(GLFW_KEY_RIGHT))
+            if ((app->getKeyboard().isPressed(GLFW_KEY_UP) || app->getKeyboard().isPressed(GLFW_KEY_DOWN) || app->getKeyboard().isPressed(GLFW_KEY_LEFT) || app->getKeyboard().isPressed(GLFW_KEY_RIGHT)) && !skullMoving)
             {
                 // // MOVING   =>  Jump Effect
                 frog->localTransform.position.y = float(0.05f * sin(glfwGetTime() * 10) + 0.05f) - 1.05f;           // make the frog jump
@@ -251,10 +270,10 @@ namespace our
             frogAboveTrunk = false;
             for (auto log : logs)
             {
-                if (frog->localTransform.position.x < log->localTransform.position.x + log->localTransform.scale[0] &&
+                if ((frog->localTransform.position.x < log->localTransform.position.x + log->localTransform.scale[0] &&
                     frog->localTransform.position.x > log->localTransform.position.x - log->localTransform.scale[0] &&
                     frog->localTransform.position.z < log->localTransform.position.z + log->localTransform.scale[2] &&
-                    frog->localTransform.position.z > log->localTransform.position.z - log->localTransform.scale[2])
+                    frog->localTransform.position.z > log->localTransform.position.z - log->localTransform.scale[2]) && !skullMoving)
                 {
                     frogAboveTrunk = true;
                     MovementComponent * movement = log->getComponent<MovementComponent>();
@@ -286,7 +305,7 @@ namespace our
             }
 
 
-             if (!frogAboveGrass && !frogAboveTrunk)
+             if (!frogAboveGrass && !frogAboveTrunk && !skullMoving)
                 for (auto wat : water)
                 {
                     if (frog->localTransform.position.z  < (wat->localTransform.scale[1]) + wat->localTransform.position.z &&
@@ -294,7 +313,9 @@ namespace our
                     
                     //app->setGameState(GameState::PLAYING);
                     //restartCheckpoint(world,frog, position);
-                    gameOver();
+                    
+                    skullDelay = 0.85f;
+                    gameOver(skullDelay);
                     std:: cout<<"1"<< std:: endl;
                     // GAMEOVEEEER
                     // auto &config = app->getConfig()["scene"];
@@ -329,7 +350,12 @@ namespace our
                     //app->setGameState(GameState::PLAYING);
                     //GAME OVEEEEEEER
                     //restartCheckpoint(world,frog, position);
-                    gameOver();
+                    if((car->name =="floatingCar" && frog->localTransform.position.z < carPosition.z + 0.5f && frog->localTransform.position.z > carPosition.z - 1.1f )  
+                    || (car->name=="floatingCarReversed" && frog->localTransform.position.z < carPosition.z + 0.75f && frog->localTransform.position.z > carPosition.z - 0.85f ))
+                        skullDelay = 0.32f;
+                    else
+                        skullDelay = 0.0f;
+                    gameOver(skullDelay);
                     // auto &config = app->getConfig()["scene"];
                     // if (config.contains("world"))
                     // {
@@ -340,6 +366,12 @@ namespace our
                     
                 }
             }
+
+            if (app->getTimeDiff() <= 0)
+            {
+                this->gameOver(0.0f);
+            }
+
             if(repositionFrogCheck){
                 repositionFrog(frog,position, world);
                 repositionFrogCheck = false;
@@ -363,9 +395,8 @@ namespace our
                     
                 }
             }
-            if (glfwGetTime() - lastTimeTakenPostPreprocessed >= 0.25f && (renderer->effectOne || renderer->effectTwo))
+            if (glfwGetTime() - lastTimeTakenPostPreprocessed >= 0.25f && renderer->effectTwo)
             {
-                renderer->effectOne = false;
                 renderer->effectTwo = false;
                 lastTimeTakenPostPreprocessed = 0.0f;
             }
@@ -378,6 +409,12 @@ namespace our
                 frog->localTransform.position.x - woodenBox->localTransform.position.x > -1.0f)
             {
                 app->setGameState(GameState::WIN);
+            }
+
+            if (skullMoving == true)
+            {       
+                skull->localTransform.position += deltaTime * skullMover->linearVelocity; 
+                skull->localTransform.rotation += deltaTime * skullMover->angularVelocity;                          
             }
 
         }
@@ -451,16 +488,15 @@ namespace our
                 position.z += 3;
         }
         //  When the frog hits the water, collides with a car, or runs out of time, the game is over.
-        void gameOver()
+        void gameOver(float deltaTime)
         {
-            if (skeleton) // replace with a skelton
-            {
-                skeleton->localTransform.position.y = 0;
-                
-            }
             this->renderer->effectOne = true;
+            skullMoving = true;
+
             lastTimeTakenPostPreprocessed = (float)glfwGetTime();
-            app->setGameState(GameState::GAME_OVER);
+            lastTimeTakenPostPreprocessed += deltaTime;
+            
+           app->setGameState(GameState::GAME_OVER);
 
             playAudio("game_over.mp3");
         }
