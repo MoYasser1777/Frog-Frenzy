@@ -143,22 +143,6 @@
                   "sampler": "default",
                   "albedo": "tire"
                 },
-                "rock": {
-                  "type": "lighted",
-                  "shader": "lighted",
-                  "pipelineState": {
-                    "faceCulling": {
-                      "enabled": false
-                    },
-                    "depthTesting": {
-                      "enabled": true
-                    }
-                  },
-                  "tint": [1, 1, 1, 1],
-                  "texture": "rock",
-                  "sampler": "default",
-                  "albedo": "rock"
-                },
                 "brickWall": {
                   "type": "textured",
                   "shader": "textured",
@@ -188,8 +172,8 @@
                   "tint": [0.45, 0.4, 0.5, 1]
                 },
                 "water": {
-                  "type": "textured",
-                  "shader": "textured",
+                  "type": "lighted",
+                  "shader": "lighted",
                   "pipelineState": {
                     "faceCulling": {
                       "enabled": false
@@ -200,7 +184,8 @@
                   },
                   "tint": [1, 1, 1, 1],
                   "texture": "water",
-                  "sampler": "default"
+                  "sampler": "default",
+                  "albedo": "water"
                 },
                 "trunkWoodMaterial": {
                   "type": "lighted",

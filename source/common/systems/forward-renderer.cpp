@@ -267,18 +267,14 @@ namespace our
                         // in case of spot light we need to send the position and direction of the light
                         else if (lightComponents[i]->LightType == LightType::SPOT)
                         {
-                            // glm::vec3 directional_direction = glm::normalize(lightComponents[i]->getOwner()->getLocalToWorldMatrix() * glm::vec4(lightComponents[i]->getOwner()->localTransform.rotation ,0));
-                            // glm::vec3 directional_direction = glm::normalize(lightComponents[i]->getOwner()->getLocalToWorldMatrix() * glm::vec4(lightComponents[i]->getOwner()->localTransform.rotation ,0));
                             glm::vec3 directional_direction = glm::normalize(lightComponents[i]->getOwner()->getLocalToWorldMatrix() * glm::vec4(lightComponents[i]->direction, 0));
-                            // cout the direction of the light
-                            // std::cout << "directional_direction: " << directional_direction.x << " " << directional_direction.y << " " << directional_direction.z << std::endl;
                             // we multiply local to world matrix by (0,0,0,1) to get the vec3 and drop the w component
                             glm::vec3 position = glm::vec3(lightComponents[i]->getOwner()->getLocalToWorldMatrix()[3]);
                             material->shader->set("lights[" + std::to_string(i) + "].position", position);
                             material->shader->set("lights[" + std::to_string(i) + "].direction", directional_direction);
                             material->shader->set("lights[" + std::to_string(i) + "].cone_angles", lightComponents[i]->cone_angles);
                         }
-                        // material->shader->set("lights[" + std::to_string(i) + "].color", lightComponents[i]->color);
+                        
                         material->shader->set("lights[" + std::to_string(i) + "].attenuation", lightComponents[i]->attenuation);
                         material->shader->set("lights[" + std::to_string(i) + "].diffuse", lightComponents[i]->diffuse);
                         material->shader->set("lights[" + std::to_string(i) + "].specular", lightComponents[i]->specular);
