@@ -412,7 +412,7 @@ namespace our
             else if (effectTwo)
                 postprocessShader->attach("assets/shaders/postprocess/radial-blur.frag", GL_FRAGMENT_SHADER);
             else if (effectThree)
-                postprocessShader->attach("assets/shaders/postprocess/win.frag", GL_FRAGMENT_SHADER);
+                postprocessShader->attach("assets/shaders/postprocess/speed.frag", GL_FRAGMENT_SHADER);
             else
                 postprocessShader->attach("assets/shaders/postprocess/vignette.frag", GL_FRAGMENT_SHADER);
 

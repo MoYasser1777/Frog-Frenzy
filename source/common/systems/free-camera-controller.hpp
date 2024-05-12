@@ -306,13 +306,13 @@ namespace our
 
                         playAudio("splash.mp3");
                     
-                    //  if(app->getLives() == 1)
-                    //  {
-                    //     app->changeState("lose");
-                    //     return;
-                    // }else{
-                    //     gameOver();
-                    // }
+                     if(app->getLives() == 1)
+                     {
+                        app->changeState("lose");
+                        return;
+                    }else{
+                        gameOver();
+                    }
                     
                     }
                         
@@ -369,20 +369,19 @@ namespace our
                 
                     world->markForRemoval(star); //? removing star after collision detection
                     world->deleteMarkedEntities();
-                    //star->localTransform.position.y = -5;
-                    // if(validStar[app->getChecks()-1]){
                     playAudio("stars.mp3");      //? playing audio at collision detection
                     renderer->effectTwo = true;   
+                    //renderer->effectThree = true;
                     lastTimeTakenPostPreprocessed = (float)glfwGetTime();             
                     app->upgradeCheck();
-                    //validStar[app->getChecks()-1] = false;
-                    // }
+
                     
                 }
             }
             if (glfwGetTime() - lastTimeTakenPostPreprocessed >= 0.25f && renderer->effectTwo)
             {
                 renderer->effectTwo = false;
+                renderer->effectThree = false;
                 lastTimeTakenPostPreprocessed = 0.0f;
             }
 
@@ -395,6 +394,7 @@ namespace our
             {
                 playAudio("riseGlory.mp3");
                 app->setGameState(GameState::WIN);
+                skull->localTransform.position.y = -5;
             }
 
 
@@ -428,13 +428,7 @@ namespace our
             app->setGameState(GameState::PLAYING);
             int currentLives = app->getLives();
             
-            //app->setLives(currentLives - 1);
-
-            //auto &config = app->getConfig()["scene"];
-            // If we have a world in the scene config, we use it to populate our world
-            // if(config.contains("world")){
-            //     world->clear();
-            //     world->deserialize(config["world"]);
+            app->setLives(currentLives - 1);
             repositionFrogCheck = true;
         }
         void repositionFrog( Entity * frog, glm::vec3 & position, World* world){
