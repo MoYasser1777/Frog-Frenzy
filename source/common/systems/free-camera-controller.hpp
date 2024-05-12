@@ -187,6 +187,8 @@ namespace our
                 glm::vec3 deltaPosition = glm::vec3(0.0f, 5 * deltaTime , 0.0f); 
                 woodenBox->localTransform.position += deltaPosition; // update position of wooden box
                 frog->localTransform.position += deltaPosition;      // update position of frog
+                frog->localTransform.rotation += deltaPosition;
+                frog->localTransform.rotation += deltaPosition;
                 position += deltaPosition;                           // update position of camera
 
                 if (position.y >= maxHeightWin)
@@ -301,6 +303,8 @@ namespace our
                 {
                     if (frog->localTransform.position.z  < (wat->localTransform.scale[1]) + wat->localTransform.position.z &&
                     frog->localTransform.position.z   >  wat->localTransform.position.z - (wat->localTransform.scale[1]) ){
+
+                        playAudio("splash.mp3");
                     
                     //  if(app->getLives() == 1)
                     //  {
@@ -336,6 +340,7 @@ namespace our
                             return;
 
                         }else{
+                            playAudio("car.mp3");
                             gameOver();
                         }
                     
@@ -388,6 +393,7 @@ namespace our
                 frog->localTransform.position.x - woodenBox->localTransform.position.x < 1.0f &&
                 frog->localTransform.position.x - woodenBox->localTransform.position.x > -1.0f)
             {
+                playAudio("riseGlory.mp3");
                 app->setGameState(GameState::WIN);
             }
 
@@ -463,7 +469,7 @@ namespace our
             
             app->setGameState(GameState::GAME_OVER);
 
-            //playAudio("game_over.mp3");
+            playAudio("die.mp3");
         }
         // When the state exits, it should call this function to ensure the mouse is unlocked
         void exit(){
