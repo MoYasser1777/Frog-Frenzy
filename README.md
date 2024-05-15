@@ -1,2 +1,2 @@
-# Zombie-Tsunami
-A Computer graphics project leveraging OpenGL to create a thrilling game experience. Players will immerse themselves in a world overrun by zombies, where they must navigate through obstacles, gather allies, and survive the apocalypse.
+# Frog Frenzy
+Computer graphics project that brings a classic arcade-style game to life with modern graphics and engaging gameplay. This project is designed to demonstrate advanced concepts in computer graphics, including animation, collision detection, and user input handling. Developed using OpenGL, the game showcases a playful and interactive environment where players guide a frog through various obstacles to reach the safety of its home.
